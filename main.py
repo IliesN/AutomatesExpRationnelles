@@ -220,10 +220,94 @@ class Automate:
             print("Voici l'automate deterministe et complet")
             automate5.afficher_tableau()
 
+    def minimisation(self):
+        if not self.est_deterministe_complet():
+            print(
+                "L'automate doit être déterministe et complet avant la minimisation. Déterminisation et complétion en cours...")
+            self.determinisation()
+            self.completion()
 
+        # Étape 1 : Initialisation des partitions
+        teta = [self.sortie, self.etats - self.sortie]
+        nom_partition = {}
 
+        for i, groupe in enumerate(teta):
+            nom = f"T{i + 1}" if groupe & self.sortie else f"NT{i + 1}"
+            nom_partition[nom] = groupe
 
+        print("Initialisation des partitions:", nom_partition)
 
+        def modif_teta(teta, nom_partition):
+            nouvelle_partition = []
+            nouveau_nom_partition = {}
+
+            for groupe in teta:
+                sous_groupes = {}
+
+                for etat in groupe:
+                    signature = tuple(
+                        next((i for i, p in enumerate(teta) if self.transition.get(etat, {}).get(symbole) in p), -1)
+                        for symbole in sorted(self.langage)
+                    )
+
+                    if signature not in sous_groupes:
+                        sous_groupes[signature] = set()
+                    sous_groupes[signature].add(etat)
+
+                nouvelle_partition.extend(sous_groupes.values())
+
+            for i, groupe in enumerate(nouvelle_partition):
+                nom = f"T{i + 1}" if groupe & self.sortie else f"NT{i + 1}"
+                nouveau_nom_partition[nom] = groupe
+
+            return nouvelle_partition, nouveau_nom_partition
+
+        # Étape 2 : Affinement successif
+        ancienne_partition = []
+        num_iteration = 0
+
+        while teta != ancienne_partition:
+            print(f"Partition {num_iteration}: {nom_partition}")
+            ancienne_partition = teta
+            teta, nom_partition = modif_teta(teta, nom_partition)
+            num_iteration += 1
+
+        print("Minimisation terminée. Automate minimal obtenu.")
+
+        # Étape 3 : Construction de l'automate minimal
+        automate_minimal = Automate()
+        automate_minimal.definir_langage(self.langage)
+
+        etat_mapping = {nom: set(p) for nom, p in nom_partition.items()}
+        print("Correspondance des états de l'AFDC vers l'AFDCM:")
+        for nom, groupe in etat_mapping.items():
+            print(f"État minimal {nom} correspond à {groupe}")
+
+        for nom, groupe in etat_mapping.items():
+            automate_minimal.ajouter_etat(nom, entree=any(e in self.entree for e in groupe),
+                                          sortie=any(e in self.sortie for e in groupe))
+
+        for nom, groupe in etat_mapping.items():
+            for symbole in sorted(self.langage):
+                destinations = set()
+                for etat in groupe:
+                    if etat in self.transition and symbole in self.transition[etat]:
+                        destinations.update(self.transition[etat][symbole])
+
+                destination_nom = next((nom_dest for nom_dest, p in etat_mapping.items() if destinations & p), None)
+
+                if destination_nom is not None:
+                    automate_minimal.ajouter_transition(nom, symbole, destination_nom)
+
+        # Mise à jour de l'automate
+        self.etats = automate_minimal.etats
+        self.entree = automate_minimal.entree
+        self.sortie = automate_minimal.sortie
+        self.transition = automate_minimal.transition
+        self.minimal = True
+
+        print("Automate minimal obtenu et mis à jour.")
+        return self
 
 automate5 = Automate()
 automate5.definir_langage({'a', 'b'})
@@ -236,8 +320,7 @@ automate5.ajouter_transition('1', 'b', '2')
 
 print("Avant déterminisation :")
 automate5.afficher_tableau()
-
+automate5.completion()
 automate5.determinisation()
-
-
-
+automate5.minimisation()
+automate5.afficher_tableau()
