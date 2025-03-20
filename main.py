@@ -1,6 +1,5 @@
 import pandas
 
-
 # on importe la librairie pandas, car elle nous permet de créer des tableaux
 # ce qui aide à mieux representé un tableau, en fait il permet d'étiquetter
 # des variables sur les lignes et colonnes
@@ -127,8 +126,11 @@ class Automate:
     def completion(self):
         if (len(self.entree) != 0) and (self.complet == False):
             self.ajouter_etat('P')
-            for etat in self.transition:
+            for etat in self.etats:
                 for lettre in self.langage:
+                    if (etat not in self.transition):
+                        self.ajouter_transition(etat, lettre, 'P')
+
                     if (lettre in self.transition[etat]):
                         continue
                     else:
@@ -166,9 +168,66 @@ class Automate:
                 SetNT.add(etat)
         self.sortie = SetT
 
+    def determinisation(self):
+        if self.est_deterministe():
+            print("l'automate est déjà determniste")
+            return
+        automate_deterministe= Automate()
+        automate_deterministe.definir_langage(self.langage)
+
+        etat_initial = "-".join(sorted(self.entree))
+        automate_deterministe.ajouter_etat(etat_initial, entree=True)
+
+        liste_etat_a_traiter = [self.entree]
+        nouveaux_etats = {etat_initial : self.entree}
+
+        while liste_etat_a_traiter :
+            etats_courants = liste_etat_a_traiter.pop(0)
+            nom_etat_courant = '-'.join(sorted(etats_courants))
+
+            for charactere in self.langage:
+                nouvel_etat = set()
+
+                for etat in etats_courants:
+                    if etat in self.transition and charactere in self.transition[etat]:
+                        nouvel_etat.update(self.transition[etat][charactere])
+
+                if nouvel_etat:
+                    nom_nouvel_etat = '-'.join(sorted(nouvel_etat))
+
+                    if nom_nouvel_etat not in nouveaux_etats:
+                        automate_deterministe.ajouter_etat(nom_nouvel_etat)
+                        nouveaux_etats[nom_nouvel_etat] = nouvel_etat
+                        liste_etat_a_traiter.append((nouvel_etat))
+
+                        if any( x in self.sortie for x in nouvel_etat):
+                            automate_deterministe.sortie.add(nom_nouvel_etat)
+
+
+                    automate_deterministe.ajouter_transition(nom_etat_courant,charactere,nom_nouvel_etat)
+
+        self.etats = automate_deterministe.etats
+        self.entree = automate_deterministe.entree
+        self.sortie = automate_deterministe.sortie
+        self.transition= automate_deterministe.transition
+        self.deterministe = True
+
+
+
+
+        if not self.est_complet():
+            automate_deterministe.afficher_tableau()
+            print("L'automate n'est pas complet\n")
+            print("complétion automate")
+            self.completion()
+            print("Voici l'automate deterministe et complet")
+            automate_deterministe.afficher_tableau()
+
+
+
 
 automate5 = Automate()
-automate5.definir_langage({'a', 'b'})
+automate5.definir_langage({'a', 'b','c'})
 automate5.ajouter_etat('0', entree=True)
 automate5.ajouter_etat('1', entree=True)  # Deux états d'entrée (problème)
 automate5.ajouter_etat('2')
@@ -176,10 +235,10 @@ automate5.ajouter_etat('2')
 automate5.ajouter_transition('0', 'a', '1')
 automate5.ajouter_transition('1', 'b', '2')
 
-print("Automate déterministe ?", automate5.est_deterministe())
-print("Automate complet ? ", automate5.est_complet(), "\nAutomate standard ? ", automate5.est_standard())
+print("Avant déterminisation :")
 automate5.afficher_tableau()
 
-automate5.afficher()
-automate5.complementaire()
-automate5.afficher()
+automate5.determinisation()
+
+
+
