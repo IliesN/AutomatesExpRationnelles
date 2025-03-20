@@ -126,8 +126,11 @@ class Automate:
     def completion(self):
         if (len(self.entree) != 0) and (self.complet == False):
             self.ajouter_etat('P')
-            for etat in self.transition:
+            for etat in self.etats:
                 for lettre in self.langage:
+                    if (etat not in self.transition):
+                        self.ajouter_transition(etat, lettre, 'P')
+
                     if (lettre in self.transition[etat]):
                         continue
                     else:
@@ -210,23 +213,21 @@ class Automate:
         self.deterministe = True
 
 
-        automate5.afficher_tableau()
+
 
         if not self.est_complet():
-            automate5.afficher_tableau()
+            automate_deterministe.afficher_tableau()
             print("L'automate n'est pas complet\n")
             print("complétion automate")
             self.completion()
             print("Voici l'automate deterministe et complet")
-            automate5.afficher_tableau()
-
-
+            automate_deterministe.afficher_tableau()
 
 
 
 
 automate5 = Automate()
-automate5.definir_langage({'a', 'b'})
+automate5.definir_langage({'a', 'b','c'})
 automate5.ajouter_etat('0', entree=True)
 automate5.ajouter_etat('1', entree=True)  # Deux états d'entrée (problème)
 automate5.ajouter_etat('2')
