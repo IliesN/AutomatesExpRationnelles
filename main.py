@@ -312,7 +312,7 @@ class Automate:
 
 
 automate = Automate()
-automate.definir_langage({'a', 'b'})
+automate.definir_langage(['a', 'b'])
 automate.ajouter_etat('0', entree=True)
 automate.ajouter_etat('1')
 automate.ajouter_etat('2')
@@ -342,13 +342,32 @@ automate.ajouter_transition('9', '', '10')    # Transition épsilon
 print("\nAutomate initial :")
 automate.afficher_tableau()
 
+automateFichier = "AutomateTest"
 
-def lecture_fichier(automate):
-    with open ('Automates/' + automate + ".txt") as f:
-        f=f.read().splitlines()
-        langage={}
-        for i in range()
-        print(f)
+automate2 = Automate()
+with open ('Automates/' + automateFichier + ".txt") as f:
+    f=f.read().splitlines()
+    print(f)
+    langage=[] # Ajout du langage
+    for i in range(int(f[0])):
+        langage.append(chr(97+i))
+    automate2.definir_langage(langage)
+
+    entrees_automate = f[2].split()[1:] # Vérification des états initiaux et terminaux
+    sorties_automate = f[3].split()[1:]
+
+    for i in range(int(f[1])): # Ajout des états 
+        if str(i) in entrees_automate:
+            automate2.ajouter_etat(str(i), entree=True)
+        elif str(i) in sorties_automate:
+            automate2.ajouter_etat(str(i), sortie=True)
+        else:
+            automate2.ajouter_etat(str(i))
+
+    
+
+        
+
 
 
 
@@ -383,5 +402,4 @@ def menu_interactif():
             print("Choix invalide, veuillez réessayer.")
 
 if __name__ == "__main__":
-    lecture_fichier("AutomateTest")
-    
+    menu_interactif()
