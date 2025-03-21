@@ -309,65 +309,34 @@ class Automate:
 
 # --------------------------- CRÉATION DE L'AUTOMATE ---------------------------
 
-
-
-automate = Automate()
-automate.definir_langage(['a', 'b'])
-automate.ajouter_etat('0', entree=True)
-automate.ajouter_etat('1')
-automate.ajouter_etat('2')
-automate.ajouter_etat('3')
-automate.ajouter_etat('4')
-automate.ajouter_etat('5')
-automate.ajouter_etat('6')
-automate.ajouter_etat('7')
-automate.ajouter_etat('8')
-automate.ajouter_etat('9')
-automate.ajouter_etat('10', sortie=True)
-automate.ajouter_transition('0', '', '1')
-automate.ajouter_transition('1', 'a', '2')
-automate.ajouter_transition('2', 'b', '3')
-automate.ajouter_transition('0', '', '1')  # Transition épsilon
-automate.ajouter_transition('3', '', '10')  # Transition épsilon
-automate.ajouter_transition('0', '', '4')   # Transition épsilon
-automate.ajouter_transition('4', '', '5')   # Transition épsilon
-automate.ajouter_transition('4', '', '8')   # Transition épsilon
-automate.ajouter_transition('5', 'a', '6')   # Transition épsilon
-automate.ajouter_transition('6', 'b', '7')   # Transition épsilon
-automate.ajouter_transition('7', '', '5')    # Transition épsilon
-automate.ajouter_transition('7', '', '8')    # Transition épsilon
-automate.ajouter_transition('8', 'a', '9')    # Transition épsilon
-automate.ajouter_transition('9', '', '10')    # Transition épsilon
-
-print("\nAutomate initial :")
-automate.afficher_tableau()
-
 automateFichier = "AutomateTest"
 
-automate2 = Automate()
+automate = Automate()
 with open ('Automates/' + automateFichier + ".txt") as f:
     f=f.read().splitlines()
-    print(f)
     langage=[] # Ajout du langage
     for i in range(int(f[0])):
         langage.append(chr(97+i))
-    automate2.definir_langage(langage)
+    automate.definir_langage(langage)
 
     entrees_automate = f[2].split()[1:] # Vérification des états initiaux et terminaux
     sorties_automate = f[3].split()[1:]
 
-    for i in range(int(f[1])): # Ajout des états 
+    for i in range(int(f[1])): # Ajout des états
         if str(i) in entrees_automate:
-            automate2.ajouter_etat(str(i), entree=True)
+            automate.ajouter_etat(str(i), entree=True)
         elif str(i) in sorties_automate:
-            automate2.ajouter_etat(str(i), sortie=True)
+            automate.ajouter_etat(str(i), sortie=True)
         else:
-            automate2.ajouter_etat(str(i))
+            automate.ajouter_etat(str(i))
 
-    
+    for transition in (f[5:]):
+        split  = transition.split("-")
+        automate.ajouter_transition(split[0], split[1], split[2])
 
         
-
+print("\nAutomate initial :")
+automate.afficher_tableau()
 
 
 
