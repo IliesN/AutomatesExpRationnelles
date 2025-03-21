@@ -308,6 +308,9 @@ class Automate:
         return self
 
 # --------------------------- CRÉATION DE L'AUTOMATE ---------------------------
+
+
+
 automate = Automate()
 automate.definir_langage({'a', 'b'})
 automate.ajouter_etat('0', entree=True)
