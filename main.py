@@ -444,54 +444,41 @@ class Automate:
         return self
 
 
-def creer_automate_exemple():
-    """Crée un automate d'exemple"""
-    automate = Automate()
+# --------------------------- CRÉATION DE L'AUTOMATE ---------------------------
 
-    # Définition de l'alphabet
-    automate.definir_langage({'a', 'b'})
+automateFichier = "AutomateTest"
 
-    # Ajout des états
-    automate.ajouter_etat('0', entree=True)
-    automate.ajouter_etat('1')
-    automate.ajouter_etat('2')
-    automate.ajouter_etat('3')
-    automate.ajouter_etat('4')
-    automate.ajouter_etat('5')
-    automate.ajouter_etat('6')
-    automate.ajouter_etat('7')
-    automate.ajouter_etat('8')
-    automate.ajouter_etat('9')
-    automate.ajouter_etat('10', sortie=True)
+automate = Automate()
+with open ('Automates/' + automateFichier + ".txt") as f:
+    f=f.read().splitlines()
+    langage=[] # Ajout du langage
+    for i in range(int(f[0])):
+        langage.append(chr(97+i))
+    automate.definir_langage(langage)
 
-    # Ajout des transitions
-    automate.ajouter_transition('0', '', '1')
-    automate.ajouter_transition('1', 'a', '2')
-    automate.ajouter_transition('2', 'b', '3')
-    automate.ajouter_transition('3', '', '10')  # Transition épsilon
-    automate.ajouter_transition('0', '', '4')  # Transition épsilon
-    automate.ajouter_transition('4', '', '5')  # Transition épsilon
-    automate.ajouter_transition('4', '', '8')  # Transition épsilon
-    automate.ajouter_transition('5', 'a', '6')  # Transition épsilon
-    automate.ajouter_transition('6', 'b', '7')
-    automate.ajouter_transition('7', '', '5')  # Transition épsilon
-    automate.ajouter_transition('7', '', '8')  # Transition épsilon
-    automate.ajouter_transition('8', 'a', '9')
-    automate.ajouter_transition('9', '', '10')  # Transition épsilon
+    entrees_automate = f[2].split()[1:] # Vérification des états initiaux et terminaux
+    sorties_automate = f[3].split()[1:]
 
-    return automate
+    for i in range(int(f[1])): # Ajout des états
+        if str(i) in entrees_automate:
+            automate.ajouter_etat(str(i), entree=True)
+        elif str(i) in sorties_automate:
+            automate.ajouter_etat(str(i), sortie=True)
+        else:
+            automate.ajouter_etat(str(i))
+
+    for transition in (f[5:]):
+        split  = transition.split("-")
+        automate.ajouter_transition(split[0], split[1], split[2])
+
+        
+print("\nAutomate initial :")
+automate.afficher_tableau()
 
 
-def creer_automate_personnalise():
-    """Permet à l'utilisateur de créer un automate personnalisé"""
-    automate = Automate()
 
-    # Définition de l'alphabet
-    alphabet_str = Prompt.ask("Entrez l'alphabet (séparé par des espaces)")
-    alphabet = set(alphabet_str.split())
-    automate.definir_langage(alphabet)
-
-    # Ajout des états
+# --------------------------- MENU INTERACTIF ---------------------------
+def menu_interactif():
     while True:
         etat = Prompt.ask("Entrez un état (ou 'fin' pour terminer)")
         if etat.lower() == 'fin':
