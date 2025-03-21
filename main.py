@@ -342,6 +342,16 @@ automate.ajouter_transition('9', '', '10')    # Transition épsilon
 print("\nAutomate initial :")
 automate.afficher_tableau()
 
+
+def lecture_fichier(automate):
+    with open ('Automates/' + automate + ".txt") as f:
+        f=f.read().splitlines()
+        langage={}
+        for i in range()
+        print(f)
+
+
+
 # --------------------------- MENU INTERACTIF ---------------------------
 def menu_interactif():
     while True:
@@ -373,4 +383,5 @@ def menu_interactif():
             print("Choix invalide, veuillez réessayer.")
 
 if __name__ == "__main__":
-    menu_interactif()
+    lecture_fichier("AutomateTest")
+    
