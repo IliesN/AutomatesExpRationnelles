@@ -1,9 +1,14 @@
 import pandas
+from rich.console import Console
+from rich.panel import Panel
+from rich.table import Table
+from rich.prompt import Prompt, Confirm
+from rich.syntax import Syntax
+from rich import print as rprint
 
 
-# on importe la librairie pandas, car elle nous permet de créer des tableaux
-# ce qui aide à mieux representé un tableau, en fait il permet d'étiquetter
-# des variables sur les lignes et colonnes
+console = Console()
+
 
 
 class Automate:
@@ -48,25 +53,40 @@ class Automate:
 
     def afficher(self):
         """Affiche les informations de l'automate"""
-        print("États :", self.etats)
-        print("Alphabet :", self.langage)
-        print("États d'entrée :", self.entree)
-        print("États de sortie :", self.sortie)
-        print("Transitions :")
-        for etat, trans in self.transition.items():  # état prendra les clés du dico et
-            # trans les valeurs de ces clés qui sont en soit un autre dico
+        console.print("États :", ", ".join(sorted(self.etats)), style="green")
+        console.print("Alphabet :", ", ".join(sorted(self.langage)), style="green")
+        console.print("États d'entrée :", ", ".join(sorted(self.entree)), style="green")
+        console.print("États de sortie :", ", ".join(sorted(self.sortie)), style="green")
+
+        table = Table(title="Transitions", show_header=True, header_style="bold magenta")
+        table.add_column("État de départ", style="cyan")
+        table.add_column("Symbole", style="yellow")
+        table.add_column("États d'arrivée", style="green")
+
+        for etat, trans in self.transition.items():
             for symbole, destinations in trans.items():
-                print(f"  {etat} --({symbole})--> {destinations}")
-        print(f"- Déterministe            : {self.est_deterministe()}")
-        print(f"- Complet                 : {self.est_complet()}")
-        print(f"- Standard                : {self.est_standard()}")
-        print(f"- Déterministe & Complet  : {self.est_deterministe_complet()}")
+                table.add_row(str(etat), f"({symbole})" if symbole else "(ε)", ", ".join(sorted(destinations)))
+
+        console.print(table)
+
+        table_props = Table(title="Propriétés de l'automate", show_header=True, header_style="bold magenta")
+        table_props.add_column("Propriété", style="cyan")
+        table_props.add_column("Valeur", style="yellow")
+
+        table_props.add_row("Déterministe", "✅ Oui" if self.est_deterministe() else "❌ Non")
+        table_props.add_row("Complet", "✅ Oui" if self.est_complet() else "❌ Non")
+        table_props.add_row("Standard", "✅ Oui" if self.est_standard() else "❌ Non")
+        table_props.add_row("Déterministe & Complet", "✅ Oui" if self.est_deterministe_complet() else "❌ Non")
+        table_props.add_row("Minimal", "✅ Oui" if self.minimal else "❌ Non")
+
+        console.print(table_props)
 
     def afficher_tableau(self):
         """Affiche un tableau des transitions de l'automate"""
+        console.print("Tableau de transitions:", style="bold blue")
+
         # Liste des colonnes pour l'affichage
         colonnes = ['Etat'] + sorted(self.langage)  # les set ne sont à la base pas trié
-        # sorted permet de convertir un set en une liste trié
 
         # Préparer les données pour chaque état
         rows = []
@@ -76,14 +96,22 @@ class Automate:
                 # On récupère les états de transition pour ce symbole, s'il existe
                 if etat in self.transition and symbole in self.transition[etat]:
                     ligne.append(', '.join(sorted(self.transition[etat][symbole])))
-                    # join permet de produire une chaine de caractere, par exemple {q1, q2} en "q1, q2"
                 else:
                     ligne.append('')  # Pas de transition
             rows.append(ligne)
 
         # Créer un DataFrame avec pandas
         df = pandas.DataFrame(rows, columns=colonnes)
-        print(df)  # python reconnait directement le dataFrame d'une maniere speciale et imprime le tableau
+
+        # Créer un tableau Rich à partir du DataFrame
+        table = Table(title="Transitions par symbole")
+        for col in df.columns:
+            table.add_column(col, style="cyan" if col == "Etat" else "yellow")
+
+        for _, row in df.iterrows():
+            table.add_row(*[str(val) for val in row])
+
+        console.print(table)
 
     def est_standard(self):
         if len(self.entree) > 1:
@@ -101,6 +129,7 @@ class Automate:
             return True
 
     def standardisation(self):
+        console.print("Standardisation de l'automate...", style="bold blue")
         if (self.est_standard() == False):
             self.ajouter_etat('i')
             for entre in self.entree:
@@ -111,6 +140,9 @@ class Automate:
                             self.ajouter_transition('i', symbole, transition)
             self.entre = {'i'}
             self.standard = True
+            console.print("L'automate a été standardisé avec succès.", style="green")
+        else:
+            console.print("L'automate est déjà standard.", style="yellow")
 
     def est_complet(self):
         if (len(self.entree) != 0):
@@ -125,6 +157,7 @@ class Automate:
         return True
 
     def completion(self):
+        console.print("Complétion de l'automate...", style="bold blue")
         if (len(self.entree) != 0) and (self.complet == False):
             self.ajouter_etat('P')
             for etat in self.etats:
@@ -138,6 +171,9 @@ class Automate:
                         self.ajouter_transition(etat, lettre, 'P')
             for lettre2 in self.langage:
                 self.ajouter_transition('P', lettre2, 'P')
+            console.print("L'automate a été complété avec succès.", style="green")
+        else:
+            console.print("L'automate est déjà complet.", style="yellow")
 
     def est_deterministe(self):
         if (len(self.entree) > 1):
@@ -158,7 +194,9 @@ class Automate:
         return False
 
     def complementaire(self):
+        console.print("Calcul du complémentaire de l'automate...", style="bold blue")
         if (self.est_complet() == False):
+            console.print("L'automate n'est pas complet, application de la complétion...", style="yellow")
             self.completion()
         SetT = set()
         SetNT = set()
@@ -168,10 +206,13 @@ class Automate:
             else:
                 SetNT.add(etat)
         self.sortie = SetT
+        console.print("Le complémentaire de l'automate a été calculé avec succès.", style="green")
+        console.print(f"Nouveaux états de sortie : {', '.join(sorted(self.sortie))}", style="green")
 
     def determinisation(self):
+        console.print("Déterminisation de l'automate...", style="bold blue")
         if self.est_deterministe():
-            print("l'automate est déjà determniste")
+            console.print("L'automate est déjà déterministe.", style="yellow")
             return
         automate_deterministe = Automate()
         automate_deterministe.definir_langage(self.langage)
@@ -221,13 +262,18 @@ class Automate:
         self.transition = automate_deterministe.transition
         self.deterministe = True
 
+
+        console.print("L'automate a été déterminisé avec succès.", style="green")
+
         if not self.est_complet():
             automate_deterministe.afficher_tableau()
-            print("L'automate n'est pas complet\n")
-            print("complétion automate")
-            self.completion()
-            print("Voici l'automate deterministe et complet")
-            automate_deterministe.afficher_tableau()
+            console.print("L'automate n'est pas complet.", style="yellow")
+            if Confirm.ask("Voulez-vous compléter l'automate ?"):
+                console.print("Complétion de l'automate...", style="blue")
+                self.completion()
+                console.print("Voici l'automate déterministe et complet :", style="green")
+                self.afficher_tableau()
+
 
     def fermeture_epsilon(self, etats):
         """Retourne la fermeture ε d'un ensemble d'états"""
@@ -244,11 +290,9 @@ class Automate:
         return fermeture
 
     def determinisation_asynchrone_synchrone(self):
-        """
-        Transforme un automate asynchrone en un automate synchrone en supprimant les transitions ε,
-        puis applique la déterminisation.
-        """
-        print("Début de la transformation de l'automate asynchrone en synchrone...")
+
+        console.print("Transformation de l'automate asynchrone en synchrone puis déterminisation...", style="bold blue")
+
 
         # Étape 1 : Calcul de la fermeture ε pour chaque état de l'automate
         fermeture_epsilon = {etat: self.fermeture_epsilon({etat}) for etat in self.etats}
@@ -271,17 +315,20 @@ class Automate:
                 for e in fermeture_epsilon[etat]:  # Explorer chaque état atteignable par ε
                     if e in self.transition and symbole in self.transition[e]:  # Vérifier la transition par symbole
                         for destination in self.transition[e][symbole]:
-                            nouveaux_etats.update(destination)  # Ajouter sa fermeture ε
+
+                            nouveaux_etats.update(fermeture_epsilon[destination])  # Ajouter sa fermeture ε
+
 
                 if nouveaux_etats:
                     for i in nouveaux_etats:  # Ajouter la transition si des états sont atteints
                         automate_synchrone.ajouter_transition(etat, symbole, i)
 
-        print("Automate synchrone obtenu :")
+
+        console.print("Automate synchrone obtenu :", style="green")
         automate_synchrone.afficher_tableau()
 
         # Étape 2 : Appliquer la déterminisation sur l'automate synchrone
-        print("Début de la déterminisation de l'automate synchrone...")
+        console.print("Début de la déterminisation de l'automate synchrone...", style="blue")
         automate_synchrone.determinisation()
 
         # Mettre à jour l'automate actuel avec l'automate déterminisé
@@ -391,52 +438,196 @@ class Automate:
         return automate_minimal_final
 
 
+
+
+
+
+
+
+# --------------------------- CRÉATION DE L'AUTOMATE ---------------------------
+
+automateFichier = "AutomateTest"
+
 automate = Automate()
+with open ('Automates/' + automateFichier + ".txt") as f:
+    f=f.read().splitlines()
+    langage=[] # Ajout du langage
+    for i in range(int(f[0])):
+        langage.append(chr(97+i))
+    automate.definir_langage(langage)
 
-    # Définition de l'alphabet
-automate.definir_langage({'a', 'b'})
+    entrees_automate = f[2].split()[1:] # Vérification des états initiaux et terminaux
+    sorties_automate = f[3].split()[1:]
 
-    # Ajout des états
-automate.ajouter_etat('0', entree=True)
-automate.ajouter_etat('1')
-automate.ajouter_etat('2')
-automate.ajouter_etat('3')
-automate.ajouter_etat('4')
-automate.ajouter_etat('5')
-automate.ajouter_etat('6')
-automate.ajouter_etat('7')
-automate.ajouter_etat('8')
-automate.ajouter_etat('9')
-automate.ajouter_etat('10', sortie=True)
+    for i in range(int(f[1])): # Ajout des états
+        if str(i) in entrees_automate:
+            automate.ajouter_etat(str(i), entree=True)
+        elif str(i) in sorties_automate:
+            automate.ajouter_etat(str(i), sortie=True)
+        else:
+            automate.ajouter_etat(str(i))
 
+    for transition in (f[5:]):
+        split  = transition.split("-")
+        automate.ajouter_transition(split[0], split[1], split[2])
 
-    # Ajout des transitions
-automate.ajouter_transition('0', '', '1')
-automate.ajouter_transition('1', 'a', '2')
-automate.ajouter_transition('2', 'b', '3')
-automate.ajouter_transition('0', '', '1')  # Transition épsilon
-automate.ajouter_transition('3', '', '10')  # Transition épsilon
-automate.ajouter_transition('0', '', '4')  # Transition épsilon
-automate.ajouter_transition('4', '', '5')  # Transition épsilon
-automate.ajouter_transition('4', '', '8')  # Transition épsilon
-automate.ajouter_transition('5', 'a', '6')  # Transition épsilon
-automate.ajouter_transition('6', 'b', '7')  # Transition épsilon
-automate.ajouter_transition('7', '', '5')  # Transition épsilon
-automate.ajouter_transition('7', '', '8')  # Transition épsilon
-automate.ajouter_transition('8', 'a', '9')  # Transition épsilon
-automate.ajouter_transition('9', '', '10')  # Transition épsilon
-
-
-# Affichage de l'automate initial
+        
 print("\nAutomate initial :")
 automate.afficher_tableau()
 
-# Transformation en automate déterministe et complet
-print("\nTransformation de l'automate :")
-automate.determinisation_asynchrone_synchrone()
 
-# Affichage de l'automate déterminisé et complété
-print("\nAutomate déterministe et complet :")
-automate.afficher_tableau()
 
-automate.minimiser()
+# --------------------------- MENU INTERACTIF ---------------------------
+def menu_interactif():
+    while True:
+        etat = Prompt.ask("Entrez un état (ou 'fin' pour terminer)")
+        if etat.lower() == 'fin':
+            break
+
+        entree = Confirm.ask(f"Est-ce que {etat} est un état d'entrée?")
+        sortie = Confirm.ask(f"Est-ce que {etat} est un état de sortie?")
+
+        automate.ajouter_etat(etat, entree=entree, sortie=sortie)
+
+    # Ajout des transitions
+    console.print("Ajout des transitions :", style="bold blue")
+    console.print("Pour ajouter une transition epsilon, laissez le symbole vide", style="italic yellow")
+
+    while True:
+        console.print("États disponibles :", ", ".join(sorted(automate.etats)), style="cyan")
+        console.print("Alphabet :", ", ".join(sorted(automate.langage)), style="cyan")
+
+        depart = Prompt.ask("État de départ (ou 'fin' pour terminer)")
+        if depart.lower() == 'fin':
+            break
+
+        if depart not in automate.etats:
+            console.print(f"L'état {depart} n'existe pas!", style="bold red")
+            continue
+
+        symbole = Prompt.ask("Symbole (laissez vide pour epsilon)")
+        if symbole and symbole not in automate.langage:
+            console.print(f"Le symbole {symbole} n'appartient pas à l'alphabet!", style="bold red")
+            continue
+
+        arrivee = Prompt.ask("État d'arrivée")
+        if arrivee not in automate.etats:
+            console.print(f"L'état {arrivee} n'existe pas!", style="bold red")
+            continue
+
+        try:
+            automate.ajouter_transition(depart, symbole, arrivee)
+            console.print(f"Transition ajoutée : {depart} --({symbole or 'ε'})--> {arrivee}", style="green")
+        except ValueError as e:
+            console.print(f"Erreur : {str(e)}", style="bold red")
+
+    return automate
+
+
+def menu_principal():
+    """Affiche le menu principal"""
+    automate = None
+
+    while True:
+        console.clear()
+        console.print(Panel.fit("[bold cyan]Automates Finis[/bold cyan]", title="Menu Principal"))
+
+        options = [
+            "1. Créer un automate d'exemple",
+            "2. Créer un automate personnalisé",
+            "3. Afficher l'automate",
+            "4. Afficher l'automate sous forme de tableau",
+            "5. Vérifier si l'automate est standard",
+            "6. Standardiser l'automate",
+            "7. Vérifier si l'automate est complet",
+            "8. Compléter l'automate",
+            "9. Vérifier si l'automate est déterministe",
+            "10. Calculer le complémentaire de l'automate",
+            "11. Déterminiser l'automate",
+            "12. Déterminiser un automate asynchrone",
+            "13. Minimiser l'automate",
+            "0. Quitter"
+        ]
+
+        for option in options:
+            # Griser les options qui nécessitent un automate si aucun n'est chargé
+            if automate is None and option[0] not in "120":
+                console.print(option, style="dim")
+            else:
+                console.print(option, style="bold" if option[0] == "0" else "")
+
+        choix = Prompt.ask("Entrez votre choix", choices=[str(i) for i in range(len(options))])
+
+        if choix == "0":
+            console.print("Au revoir !", style="bold green")
+            break
+
+        elif choix == "1":
+            automate = creer_automate_exemple()
+            console.print("Automate d'exemple créé avec succès !", style="bold green")
+            automate.afficher()
+
+        elif choix == "2":
+            automate = creer_automate_personnalise()
+            console.print("Automate personnalisé créé avec succès !", style="bold green")
+            automate.afficher()
+
+        elif choix == "3":
+            if automate:
+                automate.afficher()
+
+        elif choix == "4":
+            if automate:
+                automate.afficher_tableau()
+
+        elif choix == "5":
+            if automate:
+                est_standard = automate.est_standard()
+                console.print(f"L'automate est {'standard' if est_standard else 'non standard'}.",
+                              style="green" if est_standard else "yellow")
+
+        elif choix == "6":
+            if automate:
+                automate.standardisation()
+                automate.afficher()
+
+        elif choix == "7":
+            if automate:
+                est_complet = automate.est_complet()
+                console.print(f"L'automate est {'complet' if est_complet else 'non complet'}.",
+                              style="green" if est_complet else "yellow")
+
+        elif choix == "8":
+            if automate:
+                automate.completion()
+                automate.afficher()
+
+        elif choix == "9":
+            if automate:
+                est_deterministe = automate.est_deterministe()
+                console.print(f"L'automate est {'déterministe' if est_deterministe else 'non déterministe'}.",
+                              style="green" if est_deterministe else "yellow")
+
+        elif choix == "10":
+            if automate:
+                automate.complementaire()
+                automate.afficher()
+
+        elif choix == "11":
+            if automate:
+                automate.determinisation()
+                automate.afficher()
+
+        elif choix == "12":
+            if automate:
+                automate.determinisation_asynchrone_synchrone()
+                automate.afficher()
+
+        elif choix == "13":
+            if automate:
+                automate.minimisation()
+                automate.afficher()
+
+if __name__ == "__main__":
+    menu_principal()
+
