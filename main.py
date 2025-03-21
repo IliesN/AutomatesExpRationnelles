@@ -238,6 +238,3 @@ print("Avant déterminisation :")
 automate5.afficher_tableau()
 
 automate5.determinisation()
-
-
-
