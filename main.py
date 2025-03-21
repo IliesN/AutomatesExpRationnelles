@@ -259,6 +259,7 @@ class Automate:
         self.sortie = automate_deterministe.sortie
         self.transition = automate_deterministe.transition
         self.deterministe = True
+
         console.print("L'automate a été déterminisé avec succès.", style="green")
 
         if not self.est_complet():
