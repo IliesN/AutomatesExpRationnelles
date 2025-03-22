@@ -605,8 +605,7 @@ def menu_principal():
                               style="green" if est_deterministe else "yellow")
 
         elif choix == "8":
-            if automate:
-                if automate and automate.est_deterministe_complet():
+            if automate and automate.est_deterministe_complet():
                 automate.complementaire()
             else:
                 print("L'automate doit être deterministe et complet avant que son complémentaire puisse être calculé")
