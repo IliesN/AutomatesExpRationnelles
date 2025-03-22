@@ -1,13 +1,9 @@
-import pandas
 from rich.console import Console
 from rich.panel import Panel
 from rich.table import Table
 from rich.prompt import Prompt, Confirm
-from rich.syntax import Syntax
-from rich import print as rprint
 
 console = Console()
-
 
 class Automate:
     def __init__(self):
@@ -146,6 +142,7 @@ class Automate:
         """Définit l'alphabet du langage"""
         self.langage = set(alphabet)
 
+
     def afficher_tableau(self):
         """Affiche un tableau des transitions de l'automate"""
         console.print("Tableau de transitions:", style="bold blue")
@@ -153,8 +150,13 @@ class Automate:
         # Liste des colonnes pour l'affichage
         colonnes = ['Type', 'Etat'] + sorted(self.langage)  # Ajout de la colonne "Type"
 
-        # Préparer les données pour chaque état
-        rows = []
+        # Création du tableau Rich
+        table = Table(title="Transitions par symbole")
+        for col in colonnes:
+            style_col = "cyan" if col in ["Etat", "Type"] else "yellow"
+            table.add_column(col, style=style_col)
+
+        # Ajouter les lignes avec les transitions
         for etat in sorted(self.etats):
             # Déterminer si l'état est d'entrée (E), de sortie (S) ou les deux (E/S)
             type_etat = ""
@@ -173,23 +175,10 @@ class Automate:
                     ligne.append(', '.join(sorted(self.transition[etat][symbole])))
                 else:
                     ligne.append('')  # Pas de transition
-            rows.append(ligne)
 
-        # Créer un DataFrame avec pandas
-        df = pandas.DataFrame(rows, columns=colonnes)
-
-        # Créer un tableau Rich à partir du DataFrame
-        table = Table(title="Transitions par symbole")
-        for col in df.columns:
-            style_col = "cyan" if col in ["Etat", "Type"] else "yellow"
-            table.add_column(col, style=style_col)
-
-        for index, row in df.iterrows():
-            valeurs_ligne = [str(valeur) for valeur in row]  # Convertit toutes les valeurs en texte
-            table.add_row(*valeurs_ligne)  # Ajoute la ligne au tableau Rich
+            table.add_row(*map(str, ligne))  # Convertir en texte et ajouter au tableau
 
         console.print(table)
-
 
     # Méthode permettant d'afficher les informations de l'automate
     def afficher(self):
@@ -450,6 +439,35 @@ class Automate:
                 console.print("Automate déterministe et complet obtenu :", style="green")
                 self.afficher_tableau()
 
+
+    def reconnaissanceMot(self, mots):
+        """Vérifie quels mots d'une liste sont reconnus par l'automate."""
+        resultats = {}
+        liste_mots = mots.split()  # Séparer la chaîne en mots
+
+        for mot in liste_mots:
+            etats_actuels = set(self.entree)  # Initialisation correcte des états de départ
+
+            for symbole in mot:
+                nouveaux_etats = set()
+                for etat in etats_actuels:
+                    # Vérification si l'état actuel possède une transition pour le symbole
+                    if etat in self.transition and symbole in self.transition[etat]:
+                        nouveaux_etats.update(self.transition[etat][symbole])
+                
+                if not nouveaux_etats:  # Si aucun état n'est atteint, rejet du mot
+                    resultats[mot] = False
+                    break  
+                
+                etats_actuels = nouveaux_etats  # Mise à jour des états courants
+            
+            else:
+                # Si on a fini de parcourir le mot, on regarde si on est dans un état final
+                resultats[mot] = any(etat in self.sortie for etat in etats_actuels)
+
+        return resultats
+    
+
 def creer_automate_personnalise():
     """Permet à l'utilisateur de créer un automate personnalisé"""
     automate = Automate()
@@ -567,7 +585,7 @@ def menu_principal():
             else:
                 console.print(option, style="bold" if option[0] == "0" else "")
 
-        choix = Prompt.ask("Entrez votre choix", choices=[str(i) for i in range(len(options))])
+        choix = input("Entrez votre choix (0-" + str(len(options) - 1) + "): ")
 
         if choix == "0":
             console.print("Au revoir !", style="bold green")
@@ -635,6 +653,9 @@ def menu_principal():
             automate = creer_automate_personnalise()
             automate.afficher()
 
+        elif choix == "13":
+            listeMots = input("Veuillez entrer une liste de mots à essayer : ")
+            print(automate.reconnaissanceMot(listeMots))
 
 if __name__ == "__main__":
     menu_principal()
