@@ -557,6 +557,8 @@ def menu_principal():
         elif choix == "11":
             if automate and automate.est_deterministe_complet():
                 automate.minimiser()
+            else:
+                print("L'automate doit être deterministe et complet avant d'être minimisé")
                 
 
 
