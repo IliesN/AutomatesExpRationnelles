@@ -165,11 +165,11 @@ class Automate:
         table_props.add_column("Propriété", style="cyan")
         table_props.add_column("Valeur", style="yellow")
 
-        table_props.add_row("Déterministe", "✅ Oui" if self.est_deterministe() else "❌ Non")
-        table_props.add_row("Complet", "✅ Oui" if self.est_complet() else "❌ Non")
-        table_props.add_row("Standard", "✅ Oui" if self.est_standard() else "❌ Non")
-        table_props.add_row("Déterministe & Complet", "✅ Oui" if self.est_deterministe_complet() else "❌ Non")
-        table_props.add_row("Minimal", "✅ Oui" if self.minimal else "❌ Non")
+        table_props.add_row("Déterministe", "Oui" if self.est_deterministe() else "Non")
+        table_props.add_row("Complet", "Oui" if self.est_complet() else "Non")
+        table_props.add_row("Standard", "Oui" if self.est_standard() else "Non")
+        table_props.add_row("Déterministe & Complet", "Oui" if self.est_deterministe_complet() else "Non")
+        table_props.add_row("Minimal", "Oui" if self.minimal else "Non")
 
         console.print(table_props)
 
