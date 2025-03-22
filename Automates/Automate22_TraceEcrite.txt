@@ -1,0 +1,100 @@
+États : 0, 1, 2, 3
+Alphabet : a, b, c, d
+États d'entrée : 1
+États de sortie : 1
+Tableau de transitions:
+       Transitions par symbole
+┌──────┬──────┬─────────┬───┬───┬───┐
+│ Type │ Etat │ a       │ b │ c │ d │
+├──────┼──────┼─────────┼───┼───┼───┤
+│      │ 0    │         │   │   │ 1 │
+│ E/S  │ 1    │ 0, 2, 3 │   │   │   │
+│      │ 2    │         │ 3 │   │   │
+│      │ 3    │         │   │ 0 │   │
+└──────┴──────┴─────────┴───┴───┴───┘
+     Propriétés de l'automate
+┌────────────────────────┬────────┐
+│ Propriété              │ Valeur │
+├────────────────────────┼────────┤
+│ Déterministe           │ Non    │
+│ Complet                │ Non    │
+│ Standard               │ Non    │
+│ Déterministe & Complet │ Non    │
+│ Minimal                │ Non    │
+└────────────────────────┴────────┘
+
+L'automate est non standard.
+
+Standardisation de l'automate...
+L'automate a été standardisé avec succès.
+
+Complétion de l'automate...
+L'automate a été complété avec succès.
+
+
+┌──────┬──────┬─────────┬───┬───┬───┐
+│ Type │ Etat │ a       │ b │ c │ d │
+├──────┼──────┼─────────┼───┼───┼───┤
+│      │ 0    │         │   │   │ 1 │
+│ S    │ 1    │ 0, 2, 3 │   │   │   │
+│      │ 2    │         │ 3 │   │   │
+│      │ 3    │         │   │ 0 │   │
+│ E/S  │ i    │ 0, 2, 3 │   │   │   │
+└──────┴──────┴─────────┴───┴───┴───┘
+
+
+L'automate a été déterminisé avec succès.
+Tableau de transitions:
+      Transitions par symbole
+┌──────┬───────┬───────┬───┬───┬───┐
+│ Type │ Etat  │ a     │ b │ c │ d │
+├──────┼───────┼───────┼───┼───┼───┤
+│      │ 0     │       │   │   │ 1 │
+│      │ 0-2-3 │       │ 3 │ 0 │ 1 │
+│ E    │ 1     │ 0-2-3 │   │   │   │
+│      │ 3     │       │   │ 0 │   │
+└──────┴───────┴───────┴───┴───┴───┘
+L'automate n'est pas complet.
+
+Complétion de l'automate...
+Complétion de l'automate...
+L'automate a été complété avec succès.
+Voici l'automate déterministe et complet :
+Tableau de transitions:
+      Transitions par symbole
+┌──────┬───────┬───────┬───┬───┬───┐
+│ Type │ Etat  │ a     │ b │ c │ d │
+├──────┼───────┼───────┼───┼───┼───┤
+│      │ 0     │ P     │ P │ P │ 1 │
+│      │ 0-2-3 │ P     │ 3 │ 0 │ 1 │
+│ E    │ 1     │ 0-2-3 │ P │ P │ P │
+│      │ 3     │ P     │ P │ 0 │ P │
+│      │ P     │ P     │ P │ P │ P │
+└──────┴───────┴───────┴───┴───┴───┘
+
+Début de la minimisation de l'automate...
+
+Création des partitions initiales...
+Partitions initiales : [set(), {'3', '1', '0-2-3', '0', 'P'}]
+
+Affinement des partitions...
+
+Nouvelles partitions : [{'3', '0-2-3', 'P', '1', '0'}]
+
+Affinement des partitions...
+
+Nouvelles partitions : [{'3', '0-2-3', 'P', '1', '0'}]
+
+Création de l'automate minimisé...
+
+Mise à jour des transitions de l'automate minimisé...
+
+Automate minimisé avec succès !
+Tableau de transitions:
+                      Transitions par symbole
+┌──────┬───────────┬───────────┬───────────┬───────────┬───────────┐
+│ Type │ Etat      │ a         │ b         │ c         │ d         │
+├──────┼───────────┼───────────┼───────────┼───────────┼───────────┤
+│ E    │ 00-2-313P │ 00-2-313P │ 00-2-313P │ 00-2-313P │ 00-2-313P │
+└──────┴───────────┴───────────┴───────────┴───────────┴───────────┘
+

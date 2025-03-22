@@ -1,0 +1,144 @@
+États : 0, 1, 2, 3, 4
+Alphabet : a, b, c, d
+États d'entrée : 1
+États de sortie : 0
+Tableau de transitions:
+          Transitions par symbole
+┌──────┬──────┬──────┬──────┬──────┬──────┐
+│ Type │ Etat │ a    │ b    │ c    │ d    │
+├──────┼──────┼──────┼──────┼──────┼──────┤
+│ S    │ 0    │      │      │      │      │
+│ E    │ 1    │ 1, 2 │ 3    │ 4    │ 0    │
+│      │ 2    │      │ 2, 3 │ 4    │ 0    │
+│      │ 3    │      │      │ 3, 4 │ 0    │
+│      │ 4    │      │      │      │ 0, 4 │
+└──────┴──────┴──────┴──────┴──────┴──────┘
+     Propriétés de l'automate
+┌────────────────────────┬────────┐
+│ Propriété              │ Valeur │
+├────────────────────────┼────────┤
+│ Déterministe           │ Non    │
+│ Complet                │ Non    │
+│ Standard               │ Oui    │
+│ Déterministe & Complet │ Non    │
+│ Minimal                │ Non    │
+└────────────────────────┴────────┘
+
+L'automate est standard.
+
+Standardisation de l'automate...
+L'automate est déjà standard.
+
+Complétion de l'automate...
+L'automate a été complété avec succès.
+
+┌──────┬──────┬──────┬──────┬──────┬──────┐
+│ Type │ Etat │ a    │ b    │ c    │ d    │
+├──────┼──────┼──────┼──────┼──────┼──────┤
+│ S    │ 0    │ P    │ P    │ P    │ P    │
+│ E    │ 1    │ 1, 2 │ 3    │ 4    │ 0    │
+│      │ 2    │ P    │ 2, 3 │ 4    │ 0    │
+│      │ 3    │ P    │ P    │ 3, 4 │ 0    │
+│      │ 4    │ P    │ P    │ P    │ 0, 4 │
+│      │ P    │ P    │ P    │ P    │ P    │
+└──────┴──────┴──────┴──────┴──────┴──────┘
+
+
+Déterminisation de l'automate...
+L'automate a été déterminisé avec succès.
+Tableau de transitions:
+        Transitions par symbole
+┌──────┬──────┬─────┬─────┬─────┬─────┐
+│ Type │ Etat │ a   │ b   │ c   │ d   │
+├──────┼──────┼─────┼─────┼─────┼─────┤
+│ S    │ 0    │     │     │     │     │
+│ S    │ 0-4  │     │     │     │ 0-4 │
+│ E    │ 1    │ 1-2 │ 3   │ 4   │ 0   │
+│      │ 1-2  │ 1-2 │ 2-3 │ 4   │ 0   │
+│      │ 2-3  │     │ 2-3 │ 3-4 │ 0   │
+│      │ 3    │     │     │ 3-4 │ 0   │
+│      │ 3-4  │     │     │ 3-4 │ 0-4 │
+│      │ 4    │     │     │     │ 0-4 │
+└──────┴──────┴─────┴─────┴─────┴─────┘
+L'automate n'est pas complet.
+
+Complétion de l'automate...
+Complétion de l'automate...
+L'automate a été complété avec succès.
+Voici l'automate déterministe et complet :
+Tableau de transitions:
+        Transitions par symbole
+┌──────┬──────┬─────┬─────┬─────┬─────┐
+│ Type │ Etat │ a   │ b   │ c   │ d   │
+├──────┼──────┼─────┼─────┼─────┼─────┤
+│ S    │ 0    │ P   │ P   │ P   │ P   │
+│ S    │ 0-4  │ P   │ P   │ P   │ 0-4 │
+│ E    │ 1    │ 1-2 │ 3   │ 4   │ 0   │
+│      │ 1-2  │ 1-2 │ 2-3 │ 4   │ 0   │
+│      │ 2-3  │ P   │ 2-3 │ 3-4 │ 0   │
+│      │ 3    │ P   │ P   │ 3-4 │ 0   │
+│      │ 3-4  │ P   │ P   │ 3-4 │ 0-4 │
+│      │ 4    │ P   │ P   │ P   │ 0-4 │
+│      │ P    │ P   │ P   │ P   │ P   │
+└──────┴──────┴─────┴─────┴─────┴─────┘
+
+
+Calcul du complémentaire de l'automate...
+Le complémentaire de l'automate a été calculé avec succès.
+Nouveaux états de sortie : 1, 1-2, 2-3, 3, 3-4, 4, P
+
+┌──────┬──────┬─────┬─────┬─────┬─────┐
+│ Type │ Etat │ a   │ b   │ c   │ d   │
+├──────┼──────┼─────┼─────┼─────┼─────┤
+│      │ 0    │ P   │ P   │ P   │ P   │
+│      │ 0-4  │ P   │ P   │ P   │ 0-4 │
+│ E/S  │ 1    │ 1-2 │ 3   │ 4   │ 0   │
+│ S    │ 1-2  │ 1-2 │ 2-3 │ 4   │ 0   │
+│ S    │ 2-3  │ P   │ 2-3 │ 3-4 │ 0   │
+│ S    │ 3    │ P   │ P   │ 3-4 │ 0   │
+│ S    │ 3-4  │ P   │ P   │ 3-4 │ 0-4 │
+│ S    │ 4    │ P   │ P   │ P   │ 0-4 │
+│ S    │ P    │ P   │ P   │ P   │ P   │
+└──────┴──────┴─────┴─────┴─────┴─────┘
+
+Début de la minimisation de l'automate...
+
+Création des partitions initiales...
+Partitions initiales : [{'0', '0-4'}, {'3', 'P', '2-3', '1-2', '4', '1', '3-4'}]
+
+Affinement des partitions...
+
+Nouvelles partitions : [{'0'}, {'0-4'}, {'3', '2-3', '1-2', '4', '1', '3-4'}, {'P'}]
+
+Affinement des partitions...
+
+Nouvelles partitions : [{'0'}, {'0-4'}, {'3'}, {'2-3'}, {'1', '1-2'}, {'4'}, {'3-4'}, {'P'}]
+
+Affinement des partitions...
+
+Nouvelles partitions : [{'0'}, {'0-4'}, {'3'}, {'2-3'}, {'1'}, {'1-2'}, {'4'}, {'3-4'}, {'P'}]
+
+Affinement des partitions...
+
+Nouvelles partitions : [{'0'}, {'0-4'}, {'3'}, {'2-3'}, {'1'}, {'1-2'}, {'4'}, {'3-4'}, {'P'}]
+
+Création de l'automate minimisé...
+
+Mise à jour des transitions de l'automate minimisé...
+
+Automate minimisé avec succès !
+Tableau de transitions:
+        Transitions par symbole
+┌──────┬──────┬─────┬─────┬─────┬─────┐
+│ Type │ Etat │ a   │ b   │ c   │ d   │
+├──────┼──────┼─────┼─────┼─────┼─────┤
+│ S    │ 0    │ P   │ P   │ P   │ P   │
+│ S    │ 0-4  │ P   │ P   │ P   │ 0-4 │
+│ E    │ 1    │ 1-2 │ 3   │ 4   │ 0   │
+│      │ 1-2  │ 1-2 │ 2-3 │ 4   │ 0   │
+│      │ 2-3  │ P   │ 2-3 │ 3-4 │ 0   │
+│      │ 3    │ P   │ P   │ 3-4 │ 0   │
+│      │ 3-4  │ P   │ P   │ 3-4 │ 0-4 │
+│      │ 4    │ P   │ P   │ P   │ 0-4 │
+│      │ P    │ P   │ P   │ P   │ P   │
+└──────┴──────┴─────┴─────┴─────┴─────┘

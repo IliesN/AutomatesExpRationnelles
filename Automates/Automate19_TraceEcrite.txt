@@ -1,0 +1,56 @@
+États : 0, 1, 2
+Alphabet : a
+États d'entrée : 1
+États de sortie : 0
+Tableau de transitions:
+  Transitions par
+      symbole
+┌──────┬──────┬───┐
+│ Type │ Etat │ a │
+├──────┼──────┼───┤
+│ S    │ 0    │ 0 │
+│ E    │ 1    │ 2 │
+│      │ 2    │ 0 │
+└──────┴──────┴───┘
+     Propriétés de l'automate
+┌────────────────────────┬────────┐
+│ Propriété              │ Valeur │
+├────────────────────────┼────────┤
+│ Déterministe           │ Oui    │
+│ Complet                │ Oui    │
+│ Standard               │ Oui    │
+│ Déterministe & Complet │ Oui    │
+│ Minimal                │ Non    │
+└────────────────────────┴────────┘
+
+L'automate est standard.
+
+Complétion de l'automate...
+L'automate est déjà complet.
+
+Déterminisation de l'automate...
+L'automate est déjà déterministe.
+
+Le complémentaire de l'automate a été calculé avec succès.
+Nouveaux états de sortie : 1, 2
+
+┌──────┬──────┬───┐
+│ Type │ Etat │ a │
+├──────┼──────┼───┤
+│      │ 0    │ 0 │
+│ E/S  │ 1    │ 2 │
+│ S    │ 2    │ 0 │
+└──────┴──────┴───┘
+
+
+Automate minimisé avec succès !
+Tableau de transitions:
+  Transitions par
+      symbole
+┌──────┬──────┬───┐
+│ Type │ Etat │ a │
+├──────┼──────┼───┤
+│      │ 0    │ 0 │
+│ E/S  │ 1    │ 2 │
+│ S    │ 2    │ 0 │
+└──────┴──────┴───┘

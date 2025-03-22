@@ -1,0 +1,86 @@
+États : 0, 1, 2, 3
+Alphabet : a, b
+États d'entrée : 1
+États de sortie :
+Tableau de transitions:
+Transitions par symbole
+┌──────┬──────┬───┬───┐
+│ Type │ Etat │ a │ b │
+├──────┼──────┼───┼───┤
+│      │ 0    │   │   │
+│ E    │ 1    │ 2 │ 2 │
+│      │ 2    │ 0 │ 3 │
+│      │ 3    │ 3 │ 3 │
+└──────┴──────┴───┴───┘
+     Propriétés de l'automate
+┌────────────────────────┬────────┐
+│ Propriété              │ Valeur │
+├────────────────────────┼────────┤
+│ Déterministe           │ Oui    │
+│ Complet                │ Non    │
+│ Standard               │ Oui    │
+│ Déterministe & Complet │ Non    │
+│ Minimal                │ Non    │
+└────────────────────────┴────────┘
+
+L'automate est standard.
+
+Standardisation de l'automate...
+L'automate est déjà standard.
+
+Complétion de l'automate...
+L'automate a été complété avec succès.
+
+┌──────┬──────┬───┬───┐
+│ Type │ Etat │ a │ b │
+├──────┼──────┼───┼───┤
+│      │ 0    │ P │ P │
+│ E    │ 1    │ 2 │ 2 │
+│      │ 2    │ 0 │ 3 │
+│      │ 3    │ 3 │ 3 │
+│      │ P    │ P │ P │
+└──────┴──────┴───┴───┘
+
+Déterminisation de l'automate...
+L'automate est déjà déterministe.
+
+Calcul du complémentaire de l'automate...
+Le complémentaire de l'automate a été calculé avec succès.
+Nouveaux états de sortie : 0, 1, 2, 3, P
+
+┌──────┬──────┬───┬───┐
+│ Type │ Etat │ a │ b │
+├──────┼──────┼───┼───┤
+│ S    │ 0    │ P │ P │
+│ E/S  │ 1    │ 2 │ 2 │
+│ S    │ 2    │ 0 │ 3 │
+│ S    │ 3    │ 3 │ 3 │
+│ S    │ P    │ P │ P │
+└──────┴──────┴───┴───┘
+
+Début de la minimisation de l'automate...
+
+Création des partitions initiales...
+Partitions initiales : [{'2', '3', '1', 'P', '0'}, set()]
+
+Affinement des partitions...
+
+Nouvelles partitions : [{'2', '3', '1', 'P', '0'}]
+
+Affinement des partitions...
+
+Nouvelles partitions : [{'2', '3', '1', 'P', '0'}]
+
+Création de l'automate minimisé...
+
+Mise à jour des transitions de l'automate minimisé...
+
+Automate minimisé avec succès !
+Tableau de transitions:
+    Transitions par symbole
+┌──────┬───────┬───────┬───────┐
+│ Type │ Etat  │ a     │ b     │
+├──────┼───────┼───────┼───────┤
+│ E/S  │ 0123P │ 0123P │ 0123P │
+└──────┴───────┴───────┴───────┘
+
