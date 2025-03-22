@@ -3,7 +3,6 @@ from rich.panel import Panel
 from rich.table import Table
 
 
-
 console = Console()
 
 
@@ -145,7 +144,7 @@ class Automate:
 
     def afficher_tableau(self):
         """Affiche un tableau des transitions de l'automate"""
-        console.print("Tableau de transitions:", style="bold blue")
+        console.print("Tableau de transitions:", style="blue")
 
         # Liste des colonnes pour l'affichage
         colonnes = ['Type', 'Etat'] + sorted(self.langage)  # Ajout de la colonne "Type"
@@ -153,7 +152,7 @@ class Automate:
         # Création du tableau Rich
         table = Table(title="Transitions par symbole")
         for col in colonnes:
-            style_col = "cyan" if col in ["Etat", "Type"] else "yellow"
+            style_col = "blue" if col in ["Etat", "Type"] else "yellow"
             table.add_column(col, style=style_col)
 
         # Ajouter les lignes avec les transitions
@@ -190,8 +189,8 @@ class Automate:
 
         self.afficher_tableau()
 
-        table_props = Table(title="Propriétés de l'automate", show_header=True, header_style="bold magenta")
-        table_props.add_column("Propriété", style="cyan")
+        table_props = Table(title="Propriétés de l'automate", show_header=True, header_style="blue")
+        table_props.add_column("Propriété", style="blue")
         table_props.add_column("Valeur", style="yellow")
 
         table_props.add_row("Déterministe", "Oui" if self.est_deterministe() else "Non")
@@ -219,7 +218,7 @@ class Automate:
 
     # Méthode qui permet la standardisation de l'automate
     def standardisation(self):
-        console.print("Standardisation de l'automate...", style="bold blue")
+        console.print("Standardisation de l'automate...", style="blue")
         if (self.est_standard() == False):
             self.ajouter_etat('i')
             for entre in self.entree:
@@ -251,7 +250,7 @@ class Automate:
 
     # Méthode permettant de completer un automate
     def completion(self):
-        console.print("Complétion de l'automate...", style="bold blue")
+        console.print("Complétion de l'automate...", style="blue")
         if (len(self.entree) != 0) and (self.complet == False):
             self.ajouter_etat('P')
             for etat in self.etats:
@@ -288,7 +287,7 @@ class Automate:
 
     # Méthode renvoyant le complémentaire d'un automate
     def complementaire(self):
-        console.print("Calcul du complémentaire de l'automate...", style="bold blue")
+        console.print("Calcul du complémentaire de l'automate...", style="blue")
         if (self.est_complet() == False):
             console.print("L'automate n'est pas complet, application de la complétion...", style="yellow")
             self.completion()
@@ -305,7 +304,7 @@ class Automate:
 
     # Méthode permettant de déterminiser
     def determinisation(self):
-        console.print("Déterminisation de l'automate...", style="bold blue")
+        console.print("Déterminisation de l'automate...", style="blue")
         if self.est_deterministe():
             console.print("L'automate est déjà déterministe.", style="yellow")
             return
@@ -376,7 +375,7 @@ class Automate:
         return fermeture
 
     def determinisation_asynchrone_synchrone(self):
-        console.print("Transformation de l'automate asynchrone en synchrone puis déterminisation...", style="bold blue")
+        console.print("Transformation de l'automate asynchrone en synchrone puis déterminisation...", style="blue")
 
         etat_transition_epsilon = {etat: self.etat_transition_epsilon({etat}) for etat in self.etats}
 
@@ -471,36 +470,36 @@ def creer_automate_personnalise():
         automate.ajouter_etat(etat, entree=entree, sortie=sortie)
 
     # Ajout des transitions
-    console.print("Ajout des transitions :", style="bold blue")
-    console.print("Pour ajouter une transition epsilon, laissez le symbole vide", style="italic yellow")
+    console.print("Ajout des transitions :", style="blue")
+    console.print("Pour ajouter une transition epsilon, laissez le symbole vide", style="yellow")
 
     while True:
-        console.print("États disponibles :", ", ".join(sorted(automate.etats)), style="cyan")
-        console.print("Alphabet :", ", ".join(sorted(automate.langage)), style="cyan")
+        console.print("États disponibles :", ", ".join(sorted(automate.etats)), style="blue")
+        console.print("Alphabet :", ", ".join(sorted(automate.langage)), style="blue")
 
         depart = input("État de départ (ou 'fin' pour terminer): ")
         if depart.lower() == 'fin':
             break
 
         if depart not in automate.etats:
-            console.print(f"L'état {depart} n'existe pas!", style="bold red")
+            console.print(f"L'état {depart} n'existe pas!", style="yellow")
             continue
 
         symbole = input("Symbole (laissez vide pour epsilon): ")
         if symbole and symbole not in automate.langage:
-            console.print(f"Le symbole {symbole} n'appartient pas à l'alphabet!", style="bold red")
+            console.print(f"Le symbole {symbole} n'appartient pas à l'alphabet!", style="yellow")
             continue
 
         arrivee = input("État d'arrivée: ")
         if arrivee not in automate.etats:
-            console.print(f"L'état {arrivee} n'existe pas!", style="bold red")
+            console.print(f"L'état {arrivee} n'existe pas!", style="yellow")
             continue
 
         try:
             automate.ajouter_transition(depart, symbole, arrivee)
             console.print(f"Transition ajoutée : {depart} --({symbole or 'ε'})--> {arrivee}", style="green")
         except ValueError as e:
-            console.print(f"Erreur : {str(e)}", style="bold red")
+            console.print(f"Erreur : {str(e)}", style="yellow")
 
     return automate
 
@@ -539,7 +538,7 @@ def menu_principal():
     """Affiche le menu principal"""
     automate = None
     while True:
-        console.print(Panel.fit("[bold cyan]Automates Finis[/bold cyan]", title="Menu Principal"))
+        console.print(Panel.fit("[blue]Automates Finis[/blue]", title="Menu Principal"))
 
         options = [
             "1. Sélectionner un automate",
@@ -560,14 +559,14 @@ def menu_principal():
 
         for option in options:
             if automate is None and option[0] not in "120":
-                console.print(option, style="dim")
+                console.print(option, style="yellow")
             else:
-                console.print(option, style="bold" if option[0] == "0" else "")
+                console.print(option, style="green" if option[0] == "0" else "blue")
 
         choix = input("Entrez votre choix (0-" + str(len(options) - 1) + "): ")
 
         if choix == "0":
-            console.print("Au revoir !", style="bold green")
+            console.print("Au revoir !", style="green")
             break
 
         elif choix == "1":
