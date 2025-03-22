@@ -1,6 +1,14 @@
 import pandas
+from rich.console import Console
+from rich.panel import Panel
+from rich.table import Table
+from rich.prompt import Prompt, Confirm
+from rich.syntax import Syntax
+from rich import print as rprint
 
-# --------------------------- CLASSE AUTOMATE ---------------------------
+console = Console()
+
+
 class Automate:
     def __init__(self):
         self.etats = set()  # Ensemble des états
@@ -15,24 +23,121 @@ class Automate:
 
     def ajouter_etat(self, etat, entree=False, sortie=False):
         """Ajoute un état à l'automate"""
-        self.etats.add(etat)
-        if entree:
+        self.etats.add(etat)  # add fonction prédéfini permettant d'ajouter une valeur à un set
+        if (entree == True):
             self.entree.add(etat)
-        if sortie:
+        if (sortie == True):
             self.sortie.add(etat)
 
     def ajouter_transition(self, etat_depart, symbole, etat_arrivee):
         """Ajoute une transition à l'automate"""
         if (etat_depart not in self.etats) or (etat_arrivee not in self.etats):
             raise ValueError("Les états doivent être ajoutés avant d'ajouter une transition.")
+
         if symbole != '' and symbole not in self.langage:
             raise ValueError("Le symbole doit appartenir au langage défini.")
+
         if etat_depart not in self.transition:
             self.transition[etat_depart] = {}
-        if symbole in self.transition[etat_depart]:
+
+        if symbole in self.transition[etat_depart]:  # Si le langage est déjà existante dans les transitions
             self.transition[etat_depart][symbole].add(etat_arrivee)
-        else:
+        else:  # Si le langage n'est pas présent alors on l'ajoute et on crée le set
             self.transition[etat_depart][symbole] = {etat_arrivee}
+
+    def clone(self):
+        """Crée une copie complète de l'automate."""
+        copie = Automate()
+        copie.etats = self.etats.copy()
+        copie.langage = self.langage.copy()
+        copie.entree = self.entree.copy()
+        copie.sortie = self.sortie.copy()
+        copie.transition = {etat: {symbole: destinations.copy() for symbole, destinations in trans.items()}
+                            for etat, trans in self.transition.items()}
+        copie.complet = self.complet
+        copie.standard = self.standard
+        copie.deterministe = self.deterministe
+        copie.minimal = self.minimal
+        return copie
+
+    def minimiser(self):
+            print("Début de la minimisation de l'automate...")
+            automate_minimal = self.clone()  # clonage de l'automate
+
+            # Séparation Terminaux Non Terminaux
+            print("\nCréation des partitions initiales...")
+            etats_terminaux = {etat for etat in automate_minimal.sortie}
+            etats_non_terminaux = automate_minimal.etats - etats_terminaux
+            partitions = [etats_terminaux, etats_non_terminaux]
+
+            print(f"Partitions initiales : {partitions}")
+
+            while True:
+                nouvelles_partitions = []
+                correspondance = {}
+
+                print("\nAffinement des partitions...")
+                for groupe in partitions:  # Parcours des groupes/partitions
+                    motifs = {}
+                    # Motif = Ligne de transitions
+                    for etat in groupe:
+                        motif = tuple(
+                            frozenset(
+                                next((part for part in partitions if any(dest in part for dest in
+                                                                         automate_minimal.transition.get(etat, {}).get(
+                                                                             symbole, set()))), set())
+                            )
+                            for symbole in automate_minimal.langage
+                        )
+
+                        print(f"État {etat} -> Motif {motif}")
+                        # Nouveaux groupes/partitions
+                        if motif in motifs:
+                            motifs[motif].add(etat)
+                        else:
+                            motifs[motif] = {etat}
+
+                    nouvelles_partitions.extend(motifs.values())  # MAJ des nouvelles partitions
+
+                print(f"\nNouvelles partitions : {nouvelles_partitions}")
+                # Vérification pour condition d'arrêt
+                if nouvelles_partitions == partitions:
+                    break
+                partitions = nouvelles_partitions
+            # Nouvelle automate minimisé
+            print("\nCréation de l'automate minimisé...")
+            automate_minimal_final = Automate()
+            automate_minimal_final.definir_langage(automate_minimal.langage)
+            correspondance = {}
+
+            # Fusion des états en créant des nouveaux états
+            for i, groupe in enumerate(partitions):
+                nouvel_etat = "".join(sorted(groupe))  # Utiliser les noms des états fusionnés
+                automate_minimal_final.ajouter_etat(nouvel_etat, any(e in automate_minimal.entree for e in groupe),
+                                                    any(e in automate_minimal.sortie for e in groupe))
+                for e in groupe:
+                    correspondance[e] = nouvel_etat
+
+            print("\nMise à jour des transitions de l'automate minimisé...")
+            for etat in automate_minimal.etats:
+                if etat in correspondance:
+                    for symbole, destinations in automate_minimal.transition.get(etat, {}).items():
+                        if destinations:
+                            automate_minimal_final.ajouter_transition(
+                                correspondance[etat],
+                                symbole,
+                                correspondance[next(iter(destinations))]
+                            )
+
+            self.etats = automate_minimal_final.etats
+            self.entree = automate_minimal_final.entree
+            self.sortie = automate_minimal_final.sortie
+            self.transition = automate_minimal_final.transition
+            self.minimal = True
+
+            print("\nAutomate minimisé avec succès !")
+            self.afficher_tableau()
+            return automate_minimal_final
 
     def definir_langage(self, alphabet):
         """Définit l'alphabet du langage"""
@@ -40,33 +145,65 @@ class Automate:
 
     def afficher(self):
         """Affiche les informations de l'automate"""
-        print("États         :", self.etats)
-        print("Alphabet      :", self.langage)
-        print("États d'entrée:", self.entree)
-        print("États de sortie:", self.sortie)
-        print("Transitions   :")
+        console.print("États :", ", ".join(sorted(self.etats)), style="green")
+        console.print("Alphabet :", ", ".join(sorted(self.langage)), style="green")
+        console.print("États d'entrée :", ", ".join(sorted(self.entree)), style="green")
+        console.print("États de sortie :", ", ".join(sorted(self.sortie)), style="green")
+
+        table = Table(title="Transitions", show_header=True, header_style="bold magenta")
+        table.add_column("État de départ", style="cyan")
+        table.add_column("Symbole", style="yellow")
+        table.add_column("États d'arrivée", style="green")
+
         for etat, trans in self.transition.items():
             for symbole, destinations in trans.items():
-                print(f"  {etat} --({symbole})--> {destinations}")
-        print(f"- Déterministe            : {self.est_deterministe()}")
-        print(f"- Complet                 : {self.est_complet()}")
-        print(f"- Standard                : {self.est_standard()}")
-        print(f"- Déterministe & Complet  : {self.est_deterministe_complet()}")
+                table.add_row(str(etat), f"({symbole})" if symbole else "(ε)", ", ".join(sorted(destinations)))
+
+        console.print(table)
+
+        table_props = Table(title="Propriétés de l'automate", show_header=True, header_style="bold magenta")
+        table_props.add_column("Propriété", style="cyan")
+        table_props.add_column("Valeur", style="yellow")
+
+        table_props.add_row("Déterministe", "✅ Oui" if self.est_deterministe() else "❌ Non")
+        table_props.add_row("Complet", "✅ Oui" if self.est_complet() else "❌ Non")
+        table_props.add_row("Standard", "✅ Oui" if self.est_standard() else "❌ Non")
+        table_props.add_row("Déterministe & Complet", "✅ Oui" if self.est_deterministe_complet() else "❌ Non")
+        table_props.add_row("Minimal", "✅ Oui" if self.minimal else "❌ Non")
+
+        console.print(table_props)
 
     def afficher_tableau(self):
         """Affiche un tableau des transitions de l'automate"""
-        colonnes = ['Etat'] + sorted(self.langage)
+        console.print("Tableau de transitions:", style="bold blue")
+
+        # Liste des colonnes pour l'affichage
+        colonnes = ['Etat'] + sorted(self.langage)  # les set ne sont à la base pas trié
+
+        # Préparer les données pour chaque état
         rows = []
         for etat in sorted(self.etats):
             ligne = [etat]
             for symbole in sorted(self.langage):
+                # On récupère les états de transition pour ce symbole, s'il existe
                 if etat in self.transition and symbole in self.transition[etat]:
                     ligne.append(', '.join(sorted(self.transition[etat][symbole])))
                 else:
-                    ligne.append('')
+                    ligne.append('')  # Pas de transition
             rows.append(ligne)
+
+        # Créer un DataFrame avec pandas
         df = pandas.DataFrame(rows, columns=colonnes)
-        print(df)
+
+        # Créer un tableau Rich à partir du DataFrame
+        table = Table(title="Transitions par symbole")
+        for col in df.columns:
+            table.add_column(col, style="cyan" if col == "Etat" else "yellow")
+
+        for _, row in df.iterrows():
+            table.add_row(*[str(val) for val in row])
+
+        console.print(table)
 
     def est_standard(self):
         if len(self.entree) > 1:
@@ -75,30 +212,35 @@ class Automate:
         else:
             for etat in self.transition:
                 for symbole in self.transition[etat]:
+                    # if (self.entree in self.transition[etat][symbole]):
                     setdEtat = self.transition[etat][symbole]
-                    if self.entree == setdEtat:
+                    if (self.entree == setdEtat):
                         self.standard = False
                         return False
             self.standard = True
             return True
 
     def standardisation(self):
-        if self.est_standard() == False:
+        console.print("Standardisation de l'automate...", style="bold blue")
+        if (self.est_standard() == False):
             self.ajouter_etat('i')
             for entre in self.entree:
-                if entre in self.sortie:
+                if (entre in self.sortie) == True:
                     self.sortie.add('i')
                     for symbole in self.transition[entre]:
                         for transition in self.transition[entre][symbole]:
                             self.ajouter_transition('i', symbole, transition)
-            self.entree = {'i'}
+            self.entre = {'i'}
             self.standard = True
+            console.print("L'automate a été standardisé avec succès.", style="green")
+        else:
+            console.print("L'automate est déjà standard.", style="yellow")
 
     def est_complet(self):
-        if len(self.entree) != 0:
+        if (len(self.entree) != 0):
             for etat in self.transition:
                 for lettre in self.langage:
-                    if lettre in self.transition[etat]:
+                    if (lettre in self.transition[etat]):
                         continue
                     else:
                         self.complet = False
@@ -107,267 +249,316 @@ class Automate:
         return True
 
     def completion(self):
-        if len(self.entree) != 0 and self.complet == False:
+        console.print("Complétion de l'automate...", style="bold blue")
+        if (len(self.entree) != 0) and (self.complet == False):
             self.ajouter_etat('P')
             for etat in self.etats:
                 for lettre in self.langage:
-                    if etat not in self.transition:
+                    if (etat not in self.transition):
                         self.ajouter_transition(etat, lettre, 'P')
-                    elif lettre not in self.transition[etat]:
+
+                    if (lettre in self.transition[etat]):
+                        continue
+                    else:
                         self.ajouter_transition(etat, lettre, 'P')
             for lettre2 in self.langage:
                 self.ajouter_transition('P', lettre2, 'P')
+            console.print("L'automate a été complété avec succès.", style="green")
+        else:
+            console.print("L'automate est déjà complet.", style="yellow")
 
     def est_deterministe(self):
-        if len(self.entree) > 1:
+        if (len(self.entree) > 1):
             self.deterministe = False
             return False
+
         for etat, trans in self.transition.items():
-            for symbole, setEtat in trans.items():
-                if len(setEtat) > 1:
+            for symbole, SetEtat in trans.items():
+                if len(SetEtat) > 1:
                     self.deterministe = False
                     return False
         self.deterministe = True
         return True
 
     def est_deterministe_complet(self):
-        if self.est_deterministe() and self.est_complet():
+        if (self.est_deterministe() == True) and (self.est_complet() == True):
             return True
         return False
 
     def complementaire(self):
-        if self.est_complet() == False:
+        console.print("Calcul du complémentaire de l'automate...", style="bold blue")
+        if (self.est_complet() == False):
+            console.print("L'automate n'est pas complet, application de la complétion...", style="yellow")
             self.completion()
         SetT = set()
         SetNT = set()
         for etat in self.etats:
-            if etat not in self.sortie:
+            if (etat not in self.sortie):
                 SetT.add(etat)
             else:
                 SetNT.add(etat)
         self.sortie = SetT
+        console.print("Le complémentaire de l'automate a été calculé avec succès.", style="green")
+        console.print(f"Nouveaux états de sortie : {', '.join(sorted(self.sortie))}", style="green")
 
     def determinisation(self):
+        console.print("Déterminisation de l'automate...", style="bold blue")
         if self.est_deterministe():
-            print("L'automate est déjà déterministe")
+            console.print("L'automate est déjà déterministe.", style="yellow")
             return
         automate_deterministe = Automate()
         automate_deterministe.definir_langage(self.langage)
-        etat_initial = "-".join(sorted(self.entree))
+
+        etat_initial = "-".join(sorted(self.entree))  ## on fusionne les états entres en un seul chaine de caractere
         automate_deterministe.ajouter_etat(etat_initial, entree=True)
-        liste_etat_a_traiter = [self.entree]
-        nouveaux_etats = {etat_initial: self.entree}
+
+        liste_etat_a_traiter = [self.entree]  ## les états à traiter seront d'abord les entrées
+        nouveaux_etats = {
+            etat_initial: self.entree}  # On crée un dico avec clé nouvelle état entree et valeur les autres entres
+
+        ## On fait une boucle qui s'arretera quand liste_etat_a_traiter sera vide
         while liste_etat_a_traiter:
-            etats_courants = liste_etat_a_traiter.pop(0)
+            etats_courants = liste_etat_a_traiter.pop(0)  ## On supprime les états courants
             nom_etat_courant = '-'.join(sorted(etats_courants))
+
+            # Parcourt tous les symboles de l'alphabet
             for charactere in self.langage:
-                nouvel_etat = set()
+                nouvel_etat = set()  # Ensemble pour stocker les états atteints
+
+                # Vérifie les transitions possibles pour chaque état de l'ensemble actuel
                 for etat in etats_courants:
                     if etat in self.transition and charactere in self.transition[etat]:
                         nouvel_etat.update(self.transition[etat][charactere])
+
+                # Si un nouvel état est atteint avec ce caractère
                 if nouvel_etat:
                     nom_nouvel_etat = '-'.join(sorted(nouvel_etat))
+
+                    # Si ce nouvel état n'existe pas encore dans l'automate déterminisé, on l'ajoute
                     if nom_nouvel_etat not in nouveaux_etats:
                         automate_deterministe.ajouter_etat(nom_nouvel_etat)
                         nouveaux_etats[nom_nouvel_etat] = nouvel_etat
-                        liste_etat_a_traiter.append(nouvel_etat)
+                        liste_etat_a_traiter.append((nouvel_etat))
+
+                        # Vérifie si l'un des anciens états de ce nouvel état fusionné était un état de sortie
                         if any(x in self.sortie for x in nouvel_etat):
                             automate_deterministe.sortie.add(nom_nouvel_etat)
+
+                    # Ajoute la transition correspondante dans le nouvel automate
                     automate_deterministe.ajouter_transition(nom_etat_courant, charactere, nom_nouvel_etat)
+
+        # Mise à jour des attributs de l'automate actuel avec ceux de l'automate déterminisé
         self.etats = automate_deterministe.etats
         self.entree = automate_deterministe.entree
         self.sortie = automate_deterministe.sortie
         self.transition = automate_deterministe.transition
         self.deterministe = True
+
+        console.print("L'automate a été déterminisé avec succès.", style="green")
+
         if not self.est_complet():
             automate_deterministe.afficher_tableau()
-            print("L'automate n'est pas complet\n")
-            print("Complétion de l'automate")
-            self.completion()
-            print("Voici l'automate déterministe et complet")
-            automate_deterministe.afficher_tableau()
+            console.print("L'automate n'est pas complet.", style="yellow")
+            if Confirm.ask("Voulez-vous compléter l'automate ?"):
+                console.print("Complétion de l'automate...", style="blue")
+                self.completion()
+                console.print("Voici l'automate déterministe et complet :", style="green")
+                self.afficher_tableau()
 
     def fermeture_epsilon(self, etats):
         """Retourne la fermeture ε d'un ensemble d'états"""
-        fermeture = set(etats)
-        pile = list(etats)
+        fermeture = set(etats)  # Initialisation avec les états donnés
+        pile = list(etats)  # Utilisation d'une pile pour le parcours en profondeur
+
         while pile:
-            etat = pile.pop()
-            if etat in self.transition and '' in self.transition[etat]:
-                for e in self.transition[etat]['']:
-                    if e not in fermeture:
+            etat = pile.pop()  # Récupérer un état de la pile
+            if etat in self.transition and '' in self.transition[etat]:  # Vérifier s'il y a une transition ε
+                for e in self.transition[etat]['']:  # Explorer les états atteignables via ε
+                    if e not in fermeture:  # Ajouter uniquement les nouveaux états
                         fermeture.add(e)
-                        pile.append(e)
+                        pile.append(e)  # Ajouter à la pile pour exploration
         return fermeture
 
     def determinisation_asynchrone_synchrone(self):
-        """
-        Transforme un automate asynchrone en un automate synchrone en supprimant les transitions ε,
-        puis applique la déterminisation.
-        """
-        print("Début de la transformation de l'automate asynchrone en synchrone...")
-        fermeture_epsilon_dict = {etat: self.fermeture_epsilon({etat}) for etat in self.etats}
+        console.print("Transformation de l'automate asynchrone en synchrone puis déterminisation...", style="bold blue")
+
+        # Étape 1 : Calcul de la fermeture ε pour chaque état de l'automate
+        fermeture_epsilon = {etat: self.fermeture_epsilon({etat}) for etat in self.etats}
+
+        # Création d'un nouvel automate sans transitions ε
         automate_synchrone = Automate()
-        automate_synchrone.definir_langage(self.langage)
-        # Ajout de tous les états existants
+        automate_synchrone.definir_langage(self.langage)  # Définir le même alphabet
+
+        # Transférer les états en tenant compte de leur fermeture ε
         for etat in self.etats:
-            automate_synchrone.ajouter_etat(
-                etat,
-                entree=(etat in self.entree),
-                sortie=any(e in self.sortie for e in fermeture_epsilon_dict[etat])
-            )
-        # Ajout des transitions sans ε
+            automate_synchrone.ajouter_etat(etat,
+                                            entree=(etat in self.entree),  # Conserver les entrées
+                                            sortie=any(e in self.sortie for e in
+                                                       fermeture_epsilon[etat]))  # Vérifier les sorties
+
+        # Ajout des transitions sans transitions ε
         for etat in self.etats:
             for symbole in self.langage:
                 nouveaux_etats = set()
-                for e in fermeture_epsilon_dict[etat]:
-                    if e in self.transition and symbole in self.transition[e]:
+                for e in fermeture_epsilon[etat]:  # Explorer chaque état atteignable par ε
+                    if e in self.transition and symbole in self.transition[e]:  # Vérifier la transition par symbole
                         for destination in self.transition[e][symbole]:
-                            # Correction : utiliser add() pour ajouter l'état entier
-                            nouveaux_etats.add(destination)
+                            nouveaux_etats.update(fermeture_epsilon[destination])  # Ajouter sa fermeture ε
+
                 if nouveaux_etats:
-                    for i in nouveaux_etats:
+                    for i in nouveaux_etats:  # Ajouter la transition si des états sont atteints
                         automate_synchrone.ajouter_transition(etat, symbole, i)
-        print("Automate synchrone obtenu :")
+
+        console.print("Automate synchrone obtenu :", style="green")
         automate_synchrone.afficher_tableau()
-        print("Début de la déterminisation de l'automate synchrone...")
+
+        # Étape 2 : Appliquer la déterminisation sur l'automate synchrone
+        console.print("Début de la déterminisation de l'automate synchrone...", style="blue")
         automate_synchrone.determinisation()
+
+        # Mettre à jour l'automate actuel avec l'automate déterminisé
         self.etats = automate_synchrone.etats
         self.entree = automate_synchrone.entree
         self.sortie = automate_synchrone.sortie
         self.transition = automate_synchrone.transition
-        self.deterministe = True
-        print("Automate déterminisé avec succès.")
-        if not self.est_complet():
-            print("L'automate n'est pas complet, application de la complétion...")
-            self.completion()
-            print("Automate déterministe et complet obtenu :")
-            self.afficher_tableau()
+        self.deterministe = True  # L'automate est maintenant déterministe
+        console.print("Automate déterminisé avec succès.", style="green")
 
-    def minimisation(self):
-        if not self.est_deterministe_complet():
-            print("L'automate doit être déterministe et complet avant la minimisation. Déterminisation et complétion en cours...")
-            self.determinisation()
-            self.completion()
-        teta = [self.sortie, self.etats - self.sortie]
-        nom_partition = {}
-        for i, groupe in enumerate(teta):
-            nom = f"T{i + 1}" if groupe & self.sortie else f"NT{i + 1}"
-            nom_partition[nom] = groupe
-        print("Initialisation des partitions:", nom_partition)
-        def modif_teta(teta, nom_partition):
-            nouvelle_partition = []
-            nouveau_nom_partition = {}
-            for groupe in teta:
-                sous_groupes = {}
-                for etat in groupe:
-                    signature = tuple(
-                        next((i for i, p in enumerate(teta) if self.transition.get(etat, {}).get(symbole) in p), -1)
-                        for symbole in sorted(self.langage)
-                    )
-                    if signature not in sous_groupes:
-                        sous_groupes[signature] = set()
-                    sous_groupes[signature].add(etat)
-                nouvelle_partition.extend(sous_groupes.values())
-            for i, groupe in enumerate(nouvelle_partition):
-                nom = f"T{i + 1}" if groupe & self.sortie else f"NT{i + 1}"
-                nouveau_nom_partition[nom] = groupe
-            return nouvelle_partition, nouveau_nom_partition
-        ancienne_partition = []
-        num_iteration = 0
-        while teta != ancienne_partition:
-            print(f"Partition {num_iteration}: {nom_partition}")
-            ancienne_partition = teta
-            teta, nom_partition = modif_teta(teta, nom_partition)
-            num_iteration += 1
-        print("Minimisation terminée. Automate minimal obtenu.")
-        automate_minimal = Automate()
-        automate_minimal.definir_langage(self.langage)
-        etat_mapping = {nom: set(p) for nom, p in nom_partition.items()}
-        print("Correspondance des états de l'AFDC vers l'AFDCM:")
-        for nom, groupe in etat_mapping.items():
-            print(f"État minimal {nom} correspond à {groupe}")
-        for nom, groupe in etat_mapping.items():
-            automate_minimal.ajouter_etat(nom, entree=any(e in self.entree for e in groupe),
-                                          sortie=any(e in self.sortie for e in groupe))
-        for nom, groupe in etat_mapping.items():
-            for symbole in sorted(self.langage):
-                destinations = set()
-                for etat in groupe:
-                    if etat in self.transition and symbole in self.transition[etat]:
-                        destinations.update(self.transition[etat][symbole])
-                destination_nom = next((nom_dest for nom_dest, p in etat_mapping.items() if destinations & p), None)
-                if destination_nom is not None:
-                    automate_minimal.ajouter_transition(nom, symbole, destination_nom)
-        self.etats = automate_minimal.etats
-        self.entree = automate_minimal.entree
-        self.sortie = automate_minimal.sortie
-        self.transition = automate_minimal.transition
-        self.minimal = True
-        print("Automate minimal obtenu et mis à jour.")
-        return self
+        # Vérification de la complétude de l'automate
+        if not self.est_complet():
+            console.print("L'automate n'est pas complet.", style="yellow")
+            if Confirm.ask("Voulez-vous compléter l'automate ?"):
+                console.print("Application de la complétion...", style="blue")
+                self.completion()  # Compléter l'automate si nécessaire
+                console.print("Automate déterministe et complet obtenu :", style="green")
+                self.afficher_tableau()
+
+
+
 
 # --------------------------- CRÉATION DE L'AUTOMATE ---------------------------
-automate = Automate()
-automate.definir_langage({'a', 'b'})
-automate.ajouter_etat('0', entree=True)
-automate.ajouter_etat('1')
-automate.ajouter_etat('2')
-automate.ajouter_etat('3')
-automate.ajouter_etat('4')
-automate.ajouter_etat('5')
-automate.ajouter_etat('6')
-automate.ajouter_etat('7')
-automate.ajouter_etat('8')
-automate.ajouter_etat('9')
-automate.ajouter_etat('10', sortie=True)
-automate.ajouter_transition('0', '', '1')
-automate.ajouter_transition('1', 'a', '2')
-automate.ajouter_transition('2', 'b', '3')
-automate.ajouter_transition('0', '', '1')  # Transition épsilon
-automate.ajouter_transition('3', '', '10')  # Transition épsilon
-automate.ajouter_transition('0', '', '4')   # Transition épsilon
-automate.ajouter_transition('4', '', '5')   # Transition épsilon
-automate.ajouter_transition('4', '', '8')   # Transition épsilon
-automate.ajouter_transition('5', 'a', '6')   # Transition épsilon
-automate.ajouter_transition('6', 'b', '7')   # Transition épsilon
-automate.ajouter_transition('7', '', '5')    # Transition épsilon
-automate.ajouter_transition('7', '', '8')    # Transition épsilon
-automate.ajouter_transition('8', 'a', '9')    # Transition épsilon
-automate.ajouter_transition('9', '', '10')    # Transition épsilon
 
-print("\nAutomate initial :")
-automate.afficher_tableau()
+def lireFichier(automateFichier):
+    automate = Automate()
+    with open ('Automates/' + automateFichier + ".txt") as f:
+        f=f.read().splitlines()
+        langage=[] # Ajout du langage
+        for i in range(int(f[0])):
+            langage.append(chr(97+i))
+        automate.definir_langage(langage)
+
+        entrees_automate = f[2].split()[1:] # Vérification des états initiaux et terminaux
+        sorties_automate = f[3].split()[1:]
+
+        for i in range(int(f[1])): # Ajout des états
+            if str(i) in entrees_automate:
+                automate.ajouter_etat(str(i), entree=True)
+            elif str(i) in sorties_automate:
+                automate.ajouter_etat(str(i), sortie=True)
+            else:
+                automate.ajouter_etat(str(i))
+
+        for transition in (f[5:]):
+            split  = transition.split("-")
+            automate.ajouter_transition(split[0], split[1], split[2])
+    return automate
+
+
 
 # --------------------------- MENU INTERACTIF ---------------------------
-def menu_interactif():
+
+
+def menu_principal():
+    """Affiche le menu principal"""
+    automate = None
     while True:
-        print("\n==== MENU INCROYABLE - GESTION DE L'AUTOMATE ====")
-        print("1. Afficher l'automate actuel")
-        print("2. Transformation asynchrone → synchrone et déterminisation")
-        print("3. Afficher l'automate déterministe et complet")
-        print("4. Minimiser l'automate")
-        print("q. Quitter")
-        choix = input("Entrez votre choix: ").strip()
-        if choix == "1":
-            print("\n--- Automate Actuel ---")
-            automate.afficher_tableau()
-            automate.afficher()
-        elif choix == "2":
-            print("\n--- Transformation asynchrone → synchrone et déterminisation ---")
-            automate.determinisation_asynchrone_synchrone()
-        elif choix == "3":
-            print("\n--- Automate Déterministe et Complet ---")
-            automate.afficher_tableau()
-            automate.afficher()
-        elif choix == "4":
-            print("\n--- Minimisation de l'Automate ---")
-            automate.minimisation()
-        elif choix.lower() == "q":
-            print("Au revoir !")
+        console.print(Panel.fit("[bold cyan]Automates Finis[/bold cyan]", title="Menu Principal"))
+
+        options = [
+            "1. Sélectionner un automate",
+            "2. Afficher l'automate",
+            "3. Vérifier si l'automate est standard",
+            "4. Standardiser l'automate",
+            "5. Vérifier si l'automate est complet",
+            "6. Compléter l'automate",
+            "7. Vérifier si l'automate est déterministe",
+            "8. Calculer le complémentaire de l'automate",
+            "9. Déterminiser l'automate",
+            "10. Déterminiser un automate asynchrone",
+            "11. Minimiser l'automate",
+            "0. Quitter"
+        ]
+
+        for option in options:
+            # Griser les options qui nécessitent un automate si aucun n'est chargé
+            if automate is None and option[0] not in "120":
+                console.print(option, style="dim")
+            else:
+                console.print(option, style="bold" if option[0] == "0" else "")
+
+        choix = Prompt.ask("Entrez votre choix", choices=[str(i) for i in range(len(options))])
+
+        if choix == "0":
+            console.print("Au revoir !", style="bold green")
             break
-        else:
-            print("Choix invalide, veuillez réessayer.")
+
+        elif choix == "1":
+            choix = input("Veuillez entrer le nom du fichier correspondant : ")
+            automate = lireFichier(choix)
+            automate.afficher()
+
+        elif choix == "2":
+            if automate:
+                automate.afficher()
+
+        elif choix == "3":
+            if automate:
+                est_standard = automate.est_standard()
+                console.print(f"L'automate est {'standard' if est_standard else 'non standard'}.",
+                              style="green" if est_standard else "yellow")
+
+        elif choix == "4":
+            if automate:
+                automate.standardisation()
+                
+
+        elif choix == "5":
+            if automate:
+                est_complet = automate.est_complet()
+                console.print(f"L'automate est {'complet' if est_complet else 'non complet'}.",
+                              style="green" if est_complet else "yellow")
+
+        elif choix == "6":
+            if automate:
+                automate.completion()
+                
+
+        elif choix == "7":
+            if automate:
+                est_deterministe = automate.est_deterministe()
+                console.print(f"L'automate est {'déterministe' if est_deterministe else 'non déterministe'}.",
+                              style="green" if est_deterministe else "yellow")
+
+        elif choix == "8":
+            if automate:
+                automate.complementaire()
+                
+
+        elif choix == "9":
+            if automate:
+                automate.determinisation()
+                
+
+        elif choix == "10":
+            if automate:
+                automate.determinisation_asynchrone_synchrone()
+                
+
+        elif choix == "11":
+            if automate:
+                automate.minimiser()
+                
+
 
 if __name__ == "__main__":
-    menu_interactif()
+    menu_principal()
