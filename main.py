@@ -434,12 +434,31 @@ class Automate:
                 self.afficher_tableau()
 
     def reconnaissanceMot(self, mots):
-        listeMots = mots.split()
-        transitions = self.transition.values()
-        for element in transitions:
-            print(element)
-        for element in listeMots :
-            pass
+        """Vérifie quels mots d'une liste sont reconnus par l'automate."""
+        resultats = {}
+        liste_mots = mots.split()  # Séparer la chaîne en mots
+
+        for mot in liste_mots:
+            etats_actuels = set(self.entree)  # Initialisation correcte des états de départ
+
+            for symbole in mot:
+                nouveaux_etats = set()
+                for etat in etats_actuels:
+                    # Vérification si l'état actuel possède une transition pour le symbole
+                    if etat in self.transition and symbole in self.transition[etat]:
+                        nouveaux_etats.update(self.transition[etat][symbole])
+                
+                if not nouveaux_etats:  # Si aucun état n'est atteint, rejet du mot
+                    resultats[mot] = False
+                    break  
+                
+                etats_actuels = nouveaux_etats  # Mise à jour des états courants
+            
+            else:
+                # Si on a fini de parcourir le mot, on regarde si on est dans un état final
+                resultats[mot] = any(etat in self.sortie for etat in etats_actuels)
+
+        return resultats
 
 
 
@@ -460,7 +479,7 @@ def lireFichier(automateFichier):
         for i in range(int(f[1])): # Ajout des états
             if str(i) in entrees_automate:
                 automate.ajouter_etat(str(i), entree=True)
-            elif str(i) in sorties_automate:
+            if str(i) in sorties_automate:
                 automate.ajouter_etat(str(i), sortie=True)
             else:
                 automate.ajouter_etat(str(i))
@@ -549,6 +568,7 @@ def menu_principal():
             "10. Déterminiser un automate asynchrone",
             "11. Minimiser l'automate",
             "12. Créer un automate personnalisée",
+            "13. Reconnaître un mot",
             "0. Quitter"
         ]
 
@@ -627,6 +647,10 @@ def menu_principal():
         elif choix == "12":
             automate = creer_automate_personnalise()
             automate.afficher()
+
+        elif choix == "13":
+            listeMots = input("Veuillez entrer une liste de mots à essayer : ")
+            print(automate.reconnaissanceMot(listeMots))
 
 
 if __name__ == "__main__":
