@@ -349,12 +349,12 @@ class Automate:
         self.deterministe = True
 
         console.print("L'automate a été déterminisé avec succès.", style="green")
+        automate_deterministe.afficher_tableau()
 
         if not self.est_complet():
-            automate_deterministe.afficher_tableau()
             console.print("L'automate n'est pas complet.", style="yellow")
-            reponse_completion = input("Voulez-vous compléter l'automate ? (o/n): ").strip().lower()
-            if reponse_completion.startswith("o"):
+            reponse_completion = input("Voulez-vous compléter l'automate ? (y/n): ").strip().lower()
+            if reponse_completion.startswith("y"):
                 console.print("Complétion de l'automate...", style="blue")
                 self.completion()
                 console.print("Voici l'automate déterministe et complet :", style="green")
@@ -442,6 +442,38 @@ class Automate:
                 etats_actuels = nouveaux_etats
 
             else:
+                resultats[mot] = any(etat in self.sortie for etat in etats_actuels)
+
+        return resultats
+
+
+    def reconnaissanceMotEpsilon(self, mots):
+        """Vérifie quels mots d'une liste sont reconnus par l'automate, en prenant en compte les transitions epsilon."""
+        resultats = {}
+        liste_mots = mots.split()
+
+        for mot in liste_mots:
+            # Initialisation des états actuels avec la fermeture epsilon des états d'entrée
+            etats_actuels = self.etat_transition_epsilon(self.entree)
+
+            for symbole in mot:
+                nouveaux_etats = set()
+
+                # Pour chaque état actuel, nous vérifions les transitions pour le symbole donné
+                for etat in etats_actuels:
+                    if etat in self.transition and symbole in self.transition[etat]:
+                        nouveaux_etats.update(self.transition[etat][symbole])
+
+                # Si aucune transition n'est trouvée, on considère que le mot n'est pas reconnu
+                if not nouveaux_etats:
+                    resultats[mot] = False
+                    break
+
+                # On met à jour les états actuels avec la fermeture epsilon des nouveaux états
+                etats_actuels = self.etat_transition_epsilon(nouveaux_etats)
+
+            else:
+                # Vérification si un des états finaux est dans les états actuels
                 resultats[mot] = any(etat in self.sortie for etat in etats_actuels)
 
         return resultats
@@ -554,6 +586,7 @@ def menu_principal():
             "11. Minimiser l'automate",
             "12. Créer un automate personnalisée",
             "13. Reconnaître un mot",
+            "14. Reconnaître un mot avec automate asynchrone",
             "0. Quitter"
         ]
 
@@ -632,6 +665,9 @@ def menu_principal():
             listeMots = input("Veuillez entrer une liste de mots à essayer : ")
             print(automate.reconnaissanceMot(listeMots))
 
+        elif choix == "14":
+            listeMots = input("Veuillez entrer une liste de mots à essayer : ")
+            print(automate.reconnaissanceMotEpsilon(listeMots))
 
 if __name__ == "__main__":
     menu_principal()
