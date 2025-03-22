@@ -90,7 +90,7 @@ class Automate:
                             for symbole in automate_minimal.langage
                         )
 
-                        print(f"État {etat} -> Motif {motif}")
+
                         # Nouveaux groupes/partitions
                         if motif in motifs:
                             motifs[motif].add(etat)
@@ -555,7 +555,7 @@ def menu_principal():
                 
 
         elif choix == "11":
-            if automate:
+            if automate and automate.est_deterministe_complet():
                 automate.minimiser()
                 
 
