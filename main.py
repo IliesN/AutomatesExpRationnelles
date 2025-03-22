@@ -433,6 +433,44 @@ class Automate:
                 console.print("Automate déterministe et complet obtenu :", style="green")
                 self.afficher_tableau()
 
+    def reconnaissanceMot(self, mots):
+        listeMots = mots.split()
+        transitions = self.transition.values()
+        for element in transitions:
+            print(element)
+        for element in listeMots :
+            pass
+
+
+
+# --------------------------- CRÉATION DE L'AUTOMATE ---------------------------
+
+def lireFichier(automateFichier):
+    automate = Automate()
+    with open ('Automates/' + automateFichier + ".txt") as f:
+        f=f.read().splitlines()
+        langage=[] # Ajout du langage
+        for i in range(int(f[0])):
+            langage.append(chr(97+i))
+        automate.definir_langage(langage)
+
+        entrees_automate = f[2].split()[1:] # Vérification des états initiaux et terminaux
+        sorties_automate = f[3].split()[1:]
+
+        for i in range(int(f[1])): # Ajout des états
+            if str(i) in entrees_automate:
+                automate.ajouter_etat(str(i), entree=True)
+            elif str(i) in sorties_automate:
+                automate.ajouter_etat(str(i), sortie=True)
+            else:
+                automate.ajouter_etat(str(i))
+
+        for transition in (f[5:]):
+            split  = transition.split("-")
+            automate.ajouter_transition(split[0], split[1], split[2])
+    return automate
+
+
 def creer_automate_personnalise():
     """Permet à l'utilisateur de créer un automate personnalisé"""
     automate = Automate()
@@ -489,35 +527,6 @@ def creer_automate_personnalise():
 
 
 
-# --------------------------- CRÉATION DE L'AUTOMATE ---------------------------
-
-def lireFichier(automateFichier):
-    automate = Automate()
-    with open ('Automates/' + automateFichier + ".txt") as f:
-        f=f.read().splitlines()
-        langage=[] # Ajout du langage
-        for i in range(int(f[0])):
-            langage.append(chr(97+i))
-        automate.definir_langage(langage)
-
-        entrees_automate = f[2].split()[1:] # Vérification des états initiaux et terminaux
-        sorties_automate = f[3].split()[1:]
-
-        for i in range(int(f[1])): # Ajout des états
-            if str(i) in entrees_automate:
-                automate.ajouter_etat(str(i), entree=True)
-            elif str(i) in sorties_automate:
-                automate.ajouter_etat(str(i), sortie=True)
-            else:
-                automate.ajouter_etat(str(i))
-
-        for transition in (f[5:]):
-            split  = transition.split("-")
-            automate.ajouter_transition(split[0], split[1], split[2])
-    return automate
-
-
-
 # --------------------------- MENU INTERACTIF ---------------------------
 
 
@@ -559,11 +568,12 @@ def menu_principal():
         elif choix == "1":
             choix = input("Veuillez entrer le nom du fichier correspondant : ")
             automate = lireFichier(choix)
-            automate.afficher()
+            automate.reconnaissanceMot(choix)
+            automate.afficher_tableau()
 
         elif choix == "2":
             if automate:
-                automate.afficher()
+                automate.afficher_tableau()
 
         elif choix == "3":
             if automate:
