@@ -224,9 +224,9 @@ class Automate:
             for entre in self.entree:
                 if (entre in self.sortie) == True:
                     self.sortie.add('i')
-                    for symbole in self.transition[entre]:
-                        for transition in self.transition[entre][symbole]:
-                            self.ajouter_transition('i', symbole, transition)
+                for symbole in self.transition[entre]:
+                    for transition in self.transition[entre][symbole]:
+                        self.ajouter_transition('i', symbole, transition)
             self.entree = {'i'}
             self.standard = True
             console.print("L'automate a été standardisé avec succès.", style="green")
