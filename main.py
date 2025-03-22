@@ -433,6 +433,59 @@ class Automate:
                 console.print("Automate déterministe et complet obtenu :", style="green")
                 self.afficher_tableau()
 
+def creer_automate_personnalise():
+    """Permet à l'utilisateur de créer un automate personnalisé"""
+    automate = Automate()
+
+    # Définition de l'alphabet
+    alphabet_str = Prompt.ask("Entrez l'alphabet (séparé par des espaces)")
+    alphabet = set(alphabet_str.split())
+    automate.definir_langage(alphabet)
+
+    # Ajout des états
+    while True:
+        etat = Prompt.ask("Entrez un état (ou 'fin' pour terminer)")
+        if etat.lower() == 'fin':
+            break
+
+        entree = Confirm.ask(f"Est-ce que {etat} est un état d'entrée?")
+        sortie = Confirm.ask(f"Est-ce que {etat} est un état de sortie?")
+
+        automate.ajouter_etat(etat, entree=entree, sortie=sortie)
+
+    # Ajout des transitions
+    console.print("Ajout des transitions :", style="bold blue")
+    console.print("Pour ajouter une transition epsilon, laissez le symbole vide", style="italic yellow")
+
+    while True:
+        console.print("États disponibles :", ", ".join(sorted(automate.etats)), style="cyan")
+        console.print("Alphabet :", ", ".join(sorted(automate.langage)), style="cyan")
+
+        depart = Prompt.ask("État de départ (ou 'fin' pour terminer)")
+        if depart.lower() == 'fin':
+            break
+
+        if depart not in automate.etats:
+            console.print(f"L'état {depart} n'existe pas!", style="bold red")
+            continue
+
+        symbole = Prompt.ask("Symbole (laissez vide pour epsilon)")
+        if symbole and symbole not in automate.langage:
+            console.print(f"Le symbole {symbole} n'appartient pas à l'alphabet!", style="bold red")
+            continue
+
+        arrivee = Prompt.ask("État d'arrivée")
+        if arrivee not in automate.etats:
+            console.print(f"L'état {arrivee} n'existe pas!", style="bold red")
+            continue
+
+        try:
+            automate.ajouter_transition(depart, symbole, arrivee)
+            console.print(f"Transition ajoutée : {depart} --({symbole or 'ε'})--> {arrivee}", style="green")
+        except ValueError as e:
+            console.print(f"Erreur : {str(e)}", style="bold red")
+
+    return automate
 
 
 
@@ -486,6 +539,7 @@ def menu_principal():
             "9. Déterminiser l'automate",
             "10. Déterminiser un automate asynchrone",
             "11. Minimiser l'automate",
+            "12. Créer un automate personnalisée",
             "0. Quitter"
         ]
 
@@ -520,7 +574,7 @@ def menu_principal():
         elif choix == "4":
             if automate:
                 automate.standardisation()
-                
+
 
         elif choix == "5":
             if automate:
@@ -531,7 +585,7 @@ def menu_principal():
         elif choix == "6":
             if automate:
                 automate.completion()
-                
+
 
         elif choix == "7":
             if automate:
@@ -542,24 +596,27 @@ def menu_principal():
         elif choix == "8":
             if automate:
                 automate.complementaire()
-                
+
 
         elif choix == "9":
             if automate:
                 automate.determinisation()
-                
+
 
         elif choix == "10":
             if automate:
                 automate.determinisation_asynchrone_synchrone()
-                
+
 
         elif choix == "11":
             if automate and automate.est_deterministe_complet():
                 automate.minimiser()
             else:
                 print("L'automate doit être deterministe et complet avant d'être minimisé")
-                
+
+        elif choix == "12":
+            automate = creer_automate_personnalise()
+            automate.afficher()
 
 
 if __name__ == "__main__":
