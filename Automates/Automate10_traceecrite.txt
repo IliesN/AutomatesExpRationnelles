@@ -12,6 +12,7 @@ Afficher:
 
 Standardisation : 
 
+
 ┌──────┬──────┬───┬───┐
 │ Type │ Etat │ a │ b │
 ├──────┼──────┼───┼───┤
