@@ -554,6 +554,7 @@ def menu_principal():
             "10. Déterminiser un automate asynchrone",
             "11. Minimiser l'automate",
             "12. Créer un automate personnalisée",
+            "13. Reconnaître un mot",
             "0. Quitter"
         ]
 
