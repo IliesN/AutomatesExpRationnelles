@@ -1,0 +1,63 @@
+Affichage :
+┏━━━━━━┳━━━━━━┳━━━┓
+┃ Type ┃ Etat ┃ a ┃
+┡━━━━━━╇━━━━━━╇━━━┩
+│ S    │ 0    │ 3 │
+│ E    │ 1    │ 2 │
+│      │ 2    │ 3 │
+│ S    │ 3    │ 4 │
+│ S    │ 4    │ 0 │
+└──────┴──────┴───┘
+     Propriétés de l'automate      
+┏━━━━━━━━━━━━━━━━━━━━━━━━┳━━━━━━━━┓
+┃ Propriété              ┃ Valeur ┃
+┡━━━━━━━━━━━━━━━━━━━━━━━━╇━━━━━━━━┩
+│ Déterministe           │ Oui    │
+│ Complet                │ Oui    │
+│ Standard               │ Oui    │
+│ Déterministe & Complet │ Oui    │
+│ Minimal                │ Non    │
+└────────────────────────┴────────┘
+
+Standardiser : 
+L'automate est déjà standard.
+
+Complétion :
+L'automate est déjà complet.
+
+
+Déterminisation: 
+L'automate est déjà déterministe.
+
+
+Complémentaire :
+┏━━━━━━┳━━━━━━┳━━━┓
+┃ Type ┃ Etat ┃ a ┃
+┡━━━━━━╇━━━━━━╇━━━┩
+│      │ 0    │ 3 │
+│ E/S  │ 1    │ 2 │
+│ S    │ 2    │ 3 │
+│      │ 3    │ 4 │
+│      │ 4    │ 0 │
+└──────┴──────┴───┘
+     Propriétés de l'automate      
+┏━━━━━━━━━━━━━━━━━━━━━━━━┳━━━━━━━━┓
+┃ Propriété              ┃ Valeur ┃
+┡━━━━━━━━━━━━━━━━━━━━━━━━╇━━━━━━━━┩
+│ Déterministe           │ Oui    │
+│ Complet                │ Oui    │
+│ Standard               │ Oui    │
+│ Déterministe & Complet │ Oui    │
+│ Minimal                │ Non    │
+└────────────────────────┴────────┘
+
+
+Minimisation :
+
+┏━━━━━━┳━━━━━━┳━━━━━┓
+┃ Type ┃ Etat ┃ a   ┃
+┡━━━━━━╇━━━━━━╇━━━━━┩
+│ S    │ 034  │ 034 │
+│ E    │ 1    │ 2   │
+│      │ 2    │ 034 │
+└──────┴──────┴─────┘

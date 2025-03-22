@@ -1,0 +1,81 @@
+Affichage :
+┏━━━━━━┳━━━━━━┳━━━┳━━━┓
+┃ Type ┃ Etat ┃ a ┃ b ┃
+┡━━━━━━╇━━━━━━╇━━━╇━━━┩
+│ S    │ 0    │ 0 │ 0 │
+│ E    │ 1    │ 2 │ 2 │
+│      │ 2    │   │ 0 │
+└──────┴──────┴───┴───┘
+
+Standardiser : 
+L'automate est déjà standard.
+
+Complétion :
+┏━━━━━━┳━━━━━━┳━━━┳━━━┓
+┃ Type ┃ Etat ┃ a ┃ b ┃
+┡━━━━━━╇━━━━━━╇━━━╇━━━┩
+│ S    │ 0    │ 0 │ 0 │
+│ E    │ 1    │ 2 │ 2 │
+│      │ 2    │ P │ 0 │
+│      │ P    │ P │ P │
+└──────┴──────┴───┴───┘
+     Propriétés de l'automate      
+┏━━━━━━━━━━━━━━━━━━━━━━━━┳━━━━━━━━┓
+┃ Propriété              ┃ Valeur ┃
+┡━━━━━━━━━━━━━━━━━━━━━━━━╇━━━━━━━━┩
+│ Déterministe           │ Oui    │
+│ Complet                │ Oui    │
+│ Standard               │ Oui    │
+│ Déterministe & Complet │ Oui    │
+│ Minimal                │ Non    │
+└────────────────────────┴────────┘
+
+Déterminisation: 
+┏━━━━━━┳━━━━━━┳━━━┳━━━┓
+┃ Type ┃ Etat ┃ a ┃ b ┃
+┡━━━━━━╇━━━━━━╇━━━╇━━━┩
+│ S    │ 0    │ 0 │ 0 │
+│ E    │ 1    │ 2 │ 2 │
+│      │ 2    │   │ 0 │
+└──────┴──────┴───┴───┘
+     Propriétés de l'automate      
+┏━━━━━━━━━━━━━━━━━━━━━━━━┳━━━━━━━━┓
+┃ Propriété              ┃ Valeur ┃
+┡━━━━━━━━━━━━━━━━━━━━━━━━╇━━━━━━━━┩
+│ Déterministe           │ Oui    │
+│ Complet                │ Non    │
+│ Standard               │ Oui    │
+│ Déterministe & Complet │ Non    │
+│ Minimal                │ Non    │
+└────────────────────────┴────────┘
+
+Complémentaire :
+┏━━━━━━┳━━━━━━┳━━━┳━━━┓
+┃ Type ┃ Etat ┃ a ┃ b ┃
+┡━━━━━━╇━━━━━━╇━━━╇━━━┩
+│      │ 0    │ 0 │ 0 │
+│ E/S  │ 1    │ 2 │ 2 │
+│ S    │ 2    │ P │ 0 │
+│ S    │ P    │ P │ P │
+└──────┴──────┴───┴───┘
+     Propriétés de l'automate      
+┏━━━━━━━━━━━━━━━━━━━━━━━━┳━━━━━━━━┓
+┃ Propriété              ┃ Valeur ┃
+┡━━━━━━━━━━━━━━━━━━━━━━━━╇━━━━━━━━┩
+│ Déterministe           │ Oui    │
+│ Complet                │ Oui    │
+│ Standard               │ Oui    │
+│ Déterministe & Complet │ Oui    │
+│ Minimal                │ Non    │
+└────────────────────────┴────────┘
+
+Minimisation :
+
+┏━━━━━━┳━━━━━━┳━━━┳━━━┓
+┃ Type ┃ Etat ┃ a ┃ b ┃
+┡━━━━━━╇━━━━━━╇━━━╇━━━┩
+│ S    │ 0    │ 0 │ 0 │
+│ E    │ 1    │ 2 │ 2 │
+│      │ 2    │ P │ 0 │
+│      │ P    │ P │ P │
+└──────┴──────┴───┴───┘

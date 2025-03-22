@@ -1,0 +1,93 @@
+Affichage :
+
+┏━━━━━━┳━━━━━━┳━━━━━━┓
+┃ Type ┃ Etat ┃ a    ┃
+┡━━━━━━╇━━━━━━╇━━━━━━┩
+│ S    │ 0    │ 4    │
+│ E    │ 1    │ 2, 4 │
+│      │ 2    │ 3    │
+│ S    │ 3    │ 2    │
+│      │ 4    │ 5    │
+│      │ 5    │ 0    │
+└──────┴──────┴──────┘
+     Propriétés de l'automate      
+┏━━━━━━━━━━━━━━━━━━━━━━━━┳━━━━━━━━┓
+┃ Propriété              ┃ Valeur ┃
+┡━━━━━━━━━━━━━━━━━━━━━━━━╇━━━━━━━━┩
+│ Déterministe           │ Non    │
+│ Complet                │ Oui    │
+│ Standard               │ Oui    │
+│ Déterministe & Complet │ Non    │
+│ Minimal                │ Non    │
+└────────────────────────┴────────┘
+
+Standardiser : 
+ L'automate est déjà standard.
+
+Complétion :
+ L'automate est déjà complet.
+
+Déterminisation: 
+┏━━━━━━┳━━━━━━┳━━━━━┓
+┃ Type ┃ Etat ┃ a   ┃
+┡━━━━━━╇━━━━━━╇━━━━━┩
+│ S    │ 0-2  │ 3-4 │
+│ S    │ 0-3  │ 2-4 │
+│ E    │ 1    │ 2-4 │
+│      │ 2-4  │ 3-5 │
+│      │ 2-5  │ 0-3 │
+│ S    │ 3-4  │ 2-5 │
+│ S    │ 3-5  │ 0-2 │
+└──────┴──────┴─────┘
+     Propriétés de l'automate      
+┏━━━━━━━━━━━━━━━━━━━━━━━━┳━━━━━━━━┓
+┃ Propriété              ┃ Valeur ┃
+┡━━━━━━━━━━━━━━━━━━━━━━━━╇━━━━━━━━┩
+│ Déterministe           │ Oui    │
+│ Complet                │ Oui    │
+│ Standard               │ Oui    │
+│ Déterministe & Complet │ Oui    │
+│ Minimal                │ Non    │
+└────────────────────────┴────────┘
+
+Complémentaire :
+Le complémentaire de l'automate a été calculé avec succès.
+┏━━━━━━┳━━━━━━┳━━━━━┓
+┃ Type ┃ Etat ┃ a   ┃
+┡━━━━━━╇━━━━━━╇━━━━━┩
+│      │ 0-2  │ 3-4 │
+│      │ 0-3  │ 2-4 │
+│ E/S  │ 1    │ 2-4 │
+│ S    │ 2-4  │ 3-5 │
+│ S    │ 2-5  │ 0-3 │
+│      │ 3-4  │ 2-5 │
+│      │ 3-5  │ 0-2 │
+└──────┴──────┴─────┘
+     Propriétés de l'automate      
+┏━━━━━━━━━━━━━━━━━━━━━━━━┳━━━━━━━━┓
+┃ Propriété              ┃ Valeur ┃
+┡━━━━━━━━━━━━━━━━━━━━━━━━╇━━━━━━━━┩
+│ Déterministe           │ Oui    │
+│ Complet                │ Oui    │
+│ Standard               │ Oui    │
+│ Déterministe & Complet │ Oui    │
+│ Minimal                │ Non    │
+└────────────────────────┴────────┘
+
+Minimisation :
+
+Automate minimisé avec succès !
+Tableau de transitions:
+   Transitions par   
+       symbole       
+┏━━━━━━┳━━━━━━┳━━━━━┓
+┃ Type ┃ Etat ┃ a   ┃
+┡━━━━━━╇━━━━━━╇━━━━━┩
+│ S    │ 0-2  │ 3-4 │
+│ S    │ 0-3  │ 2-4 │
+│ E    │ 1    │ 2-4 │
+│      │ 2-4  │ 3-5 │
+│      │ 2-5  │ 0-3 │
+│ S    │ 3-4  │ 2-5 │
+│ S    │ 3-5  │ 0-2 │
+└──────┴──────┴─────┘
