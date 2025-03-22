@@ -365,7 +365,7 @@ class Automate:
                 console.print("Voici l'automate déterministe et complet :", style="green")
                 self.afficher_tableau()
 
-    def fermeture_epsilon(self, etats):
+    def etat_transition_epsilon(self, etats):
         """Retourne la fermeture ε d'un ensemble d'états"""
         fermeture = set(etats)  # Initialisation avec les états donnés
         pile = list(etats)  # Utilisation d'une pile pour le parcours en profondeur
@@ -383,7 +383,7 @@ class Automate:
         console.print("Transformation de l'automate asynchrone en synchrone puis déterminisation...", style="bold blue")
 
         # Étape 1 : Calcul de la fermeture ε pour chaque état de l'automate
-        fermeture_epsilon = {etat: self.fermeture_epsilon({etat}) for etat in self.etats}
+        etat_transition_epsilon = {etat: self.etat_transition_epsilon({etat}) for etat in self.etats}
 
         # Création d'un nouvel automate sans transitions ε
         automate_synchrone = Automate()
@@ -394,16 +394,16 @@ class Automate:
             automate_synchrone.ajouter_etat(etat,
                                             entree=(etat in self.entree),  # Conserver les entrées
                                             sortie=any(e in self.sortie for e in
-                                                       fermeture_epsilon[etat]))  # Vérifier les sorties
+                                                       etat_transition_epsilon[etat]))  # Vérifier les sorties
 
         # Ajout des transitions sans transitions ε
         for etat in self.etats:
             for symbole in self.langage:
                 nouveaux_etats = set()
-                for e in fermeture_epsilon[etat]:  # Explorer chaque état atteignable par ε
+                for e in etat_transition_epsilon[etat]:  # Explorer chaque état atteignable par ε
                     if e in self.transition and symbole in self.transition[e]:  # Vérifier la transition par symbole
                         for destination in self.transition[e][symbole]:
-                            nouveaux_etats.update(fermeture_epsilon[destination])  # Ajouter sa fermeture ε
+                            nouveaux_etats.update(etat_transition_epsilon[destination])  # Ajouter sa fermeture ε
 
                 if nouveaux_etats:
                     for i in nouveaux_etats:  # Ajouter la transition si des états sont atteints
