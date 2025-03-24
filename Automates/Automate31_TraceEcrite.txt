@@ -11,38 +11,6 @@ Affichage :
 │      │ 6    │   │   │
 │ S    │ 7    │   │   │
 └──────┴──────┴───┴───┘
-     Propriétés de l'automate      
-┏━━━━━━━━━━━━━━━━━━━━━━━━┳━━━━━━━━┓
-┃ Propriété              ┃ Valeur ┃
-┡━━━━━━━━━━━━━━━━━━━━━━━━╇━━━━━━━━┩
-│ Déterministe           │ Non    │
-│ Complet                │ Non    │
-│ Standard               │ Non    │
-│ Déterministe & Complet │ Non    │
-│ Minimal                │ Non    │
-└────────────────────────┴────────┘
-
-Standardiser : 
-┏━━━━━━┳━━━━━━┳━━━┳━━━━━┓
-┃ Type ┃ Etat ┃ a ┃ b   ┃
-┡━━━━━━╇━━━━━━╇━━━╇━━━━━┩
-│ S    │ 1    │ 2 │ 3   │
-│      │ 2    │ 3 │ 1   │
-│ S    │ 3    │   │ 3   │
-│ S    │ 3-5  │   │ 3-6 │
-│ S    │ 3-6  │   │ 3-5 │
-│ E    │ i    │ 2 │ 3-5 │
-└──────┴──────┴───┴─────┘
-     Propriétés de l'automate      
-┏━━━━━━━━━━━━━━━━━━━━━━━━┳━━━━━━━━┓
-┃ Propriété              ┃ Valeur ┃
-┡━━━━━━━━━━━━━━━━━━━━━━━━╇━━━━━━━━┩
-│ Déterministe           │ Oui    │
-│ Complet                │ Non    │
-│ Standard               │ Non    │
-│ Déterministe & Complet │ Non    │
-│ Minimal                │ Non    │
-└────────────────────────┴────────┘
 
 
 Déterminisation & Compléltion : 
