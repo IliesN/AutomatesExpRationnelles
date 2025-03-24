@@ -6,9 +6,26 @@ Affichage :
 │ E    │ 1    │ 2 │ 2 │
 │      │ 2    │   │ 0 │
 └──────┴──────┴───┴───┘
+     Propriétés de l'automate      
+┏━━━━━━━━━━━━━━━━━━━━━━━━┳━━━━━━━━┓
+┃ Propriété              ┃ Valeur ┃
+┡━━━━━━━━━━━━━━━━━━━━━━━━╇━━━━━━━━┩
+│ Déterministe           │ Oui    │
+│ Complet                │ Non    │
+│ Standard               │ Non    │
+│ Déterministe & Complet │ Non    │
+│ Minimal                │ Non    │
+└────────────────────────┴────────┘
 
 Standardiser : 
-L'automate est déjà standard.
+┏━━━━━━┳━━━━━━┳━━━┳━━━┓
+┃ Type ┃ Etat ┃ a ┃ b ┃
+┡━━━━━━╇━━━━━━╇━━━╇━━━┩
+│ S    │ 0    │ 0 │ 0 │
+│      │ 1    │ 2 │ 2 │
+│      │ 2    │   │ 0 │
+│ E    │ i    │ 2 │ 2 │
+└──────┴──────┴───┴───┘
 
 Complétion :
 ┏━━━━━━┳━━━━━━┳━━━┳━━━┓
@@ -19,35 +36,9 @@ Complétion :
 │      │ 2    │ P │ 0 │
 │      │ P    │ P │ P │
 └──────┴──────┴───┴───┘
-     Propriétés de l'automate      
-┏━━━━━━━━━━━━━━━━━━━━━━━━┳━━━━━━━━┓
-┃ Propriété              ┃ Valeur ┃
-┡━━━━━━━━━━━━━━━━━━━━━━━━╇━━━━━━━━┩
-│ Déterministe           │ Oui    │
-│ Complet                │ Oui    │
-│ Standard               │ Oui    │
-│ Déterministe & Complet │ Oui    │
-│ Minimal                │ Non    │
-└────────────────────────┴────────┘
 
 Déterminisation: 
-┏━━━━━━┳━━━━━━┳━━━┳━━━┓
-┃ Type ┃ Etat ┃ a ┃ b ┃
-┡━━━━━━╇━━━━━━╇━━━╇━━━┩
-│ S    │ 0    │ 0 │ 0 │
-│ E    │ 1    │ 2 │ 2 │
-│      │ 2    │   │ 0 │
-└──────┴──────┴───┴───┘
-     Propriétés de l'automate      
-┏━━━━━━━━━━━━━━━━━━━━━━━━┳━━━━━━━━┓
-┃ Propriété              ┃ Valeur ┃
-┡━━━━━━━━━━━━━━━━━━━━━━━━╇━━━━━━━━┩
-│ Déterministe           │ Oui    │
-│ Complet                │ Non    │
-│ Standard               │ Oui    │
-│ Déterministe & Complet │ Non    │
-│ Minimal                │ Non    │
-└────────────────────────┴────────┘
+L'automate est déjà déterministe.
 
 Complémentaire :
 ┏━━━━━━┳━━━━━━┳━━━┳━━━┓
@@ -58,16 +49,6 @@ Complémentaire :
 │ S    │ 2    │ P │ 0 │
 │ S    │ P    │ P │ P │
 └──────┴──────┴───┴───┘
-     Propriétés de l'automate      
-┏━━━━━━━━━━━━━━━━━━━━━━━━┳━━━━━━━━┓
-┃ Propriété              ┃ Valeur ┃
-┡━━━━━━━━━━━━━━━━━━━━━━━━╇━━━━━━━━┩
-│ Déterministe           │ Oui    │
-│ Complet                │ Oui    │
-│ Standard               │ Oui    │
-│ Déterministe & Complet │ Oui    │
-│ Minimal                │ Non    │
-└────────────────────────┴────────┘
 
 Minimisation :
 
