@@ -1,7 +1,7 @@
 États : 0, 1, 2, 3
 Alphabet : a, b
 États d'entrée : 1
-États de sortie :
+États de sortie : 3
 Tableau de transitions:
 Transitions par symbole
 ┌──────┬──────┬───┬───┐
@@ -10,7 +10,7 @@ Transitions par symbole
 │      │ 0    │   │   │
 │ E    │ 1    │ 2 │ 2 │
 │      │ 2    │ 0 │ 3 │
-│      │ 3    │ 3 │ 3 │
+│ S    │ 3    │ 3 │ 3 │
 └──────┴──────┴───┴───┘
      Propriétés de l'automate
 ┌────────────────────────┬────────┐
@@ -18,15 +18,25 @@ Transitions par symbole
 ├────────────────────────┼────────┤
 │ Déterministe           │ Oui    │
 │ Complet                │ Non    │
-│ Standard               │ Oui    │
+│ Standard               │ Non    │
 │ Déterministe & Complet │ Non    │
 │ Minimal                │ Non    │
 └────────────────────────┴────────┘
 
-L'automate est standard.
+L'automate est non standard.
 
 Standardisation de l'automate...
-L'automate est déjà standard.
+L'automate a été standardisé avec succès.
+
+┌──────┬──────┬───┬───┐
+│ Type │ Etat │ a │ b │
+├──────┼──────┼───┼───┤
+│      │ 0    │   │   │
+│      │ 1    │ 2 │ 2 │
+│      │ 2    │ 0 │ 3 │
+│ S    │ 3    │ 3 │ 3 │
+│ E    │ i    │ 2 │ 2 │
+└──────┴──────┴───┴───┘
 
 Complétion de l'automate...
 L'automate a été complété avec succès.
@@ -37,7 +47,7 @@ L'automate a été complété avec succès.
 │      │ 0    │ P │ P │
 │ E    │ 1    │ 2 │ 2 │
 │      │ 2    │ 0 │ 3 │
-│      │ 3    │ 3 │ 3 │
+│ S    │ 3    │ 3 │ 3 │
 │      │ P    │ P │ P │
 └──────┴──────┴───┴───┘
 
@@ -54,7 +64,7 @@ Nouveaux états de sortie : 0, 1, 2, 3, P
 │ S    │ 0    │ P │ P │
 │ E/S  │ 1    │ 2 │ 2 │
 │ S    │ 2    │ 0 │ 3 │
-│ S    │ 3    │ 3 │ 3 │
+│      │ 3    │ 3 │ 3 │
 │ S    │ P    │ P │ P │
 └──────┴──────┴───┴───┘
 

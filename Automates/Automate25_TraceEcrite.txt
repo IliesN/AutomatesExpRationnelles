@@ -19,15 +19,26 @@ Tableau de transitions:
 ├────────────────────────┼────────┤
 │ Déterministe           │ Non    │
 │ Complet                │ Non    │
-│ Standard               │ Oui    │
+│ Standard               │ Non    │
 │ Déterministe & Complet │ Non    │
 │ Minimal                │ Non    │
 └────────────────────────┴────────┘
 
-L'automate est standard.
+L'automate est non standard.
 
 Standardisation de l'automate...
-L'automate est déjà standard.
+L'automate a été standardisé avec succès.
+
+┌──────┬──────┬──────┬──────┬──────┬──────┐
+│ Type │ Etat │ a    │ b    │ c    │ d    │
+├──────┼──────┼──────┼──────┼──────┼──────┤
+│ S    │ 0    │      │      │      │      │
+│      │ 1    │ 1, 2 │ 3    │ 4    │ 0    │
+│      │ 2    │      │ 2, 3 │ 4    │ 0    │
+│      │ 3    │      │      │ 3, 4 │ 0    │
+│      │ 4    │      │      │      │ 0, 4 │
+│ E    │ i    │ 1, 2 │ 3    │ 4    │ 0    │
+└──────┴──────┴──────┴──────┴──────┴──────┘
 
 Complétion de l'automate...
 L'automate a été complété avec succès.
