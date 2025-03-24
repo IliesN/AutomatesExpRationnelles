@@ -8,11 +8,11 @@ console = Console()
 
 class Automate:
     def __init__(self):
-        self.etats = set()  # Ensemble des états
-        self.langage = set()  # Alphabet du langage
-        self.entree = set()  # États d'entrée
-        self.sortie = set()  # États de sortie
-        self.transition = {}  # Dictionnaire des transitions (Dico de Dico de Set)
+        self.etats = set()          # Ensemble des états
+        self.langage = set()        # Alphabet du langage
+        self.entree = set()         # États d'entrée
+        self.sortie = set()         # États de sortie
+        self.transition = {}    # Dictionnaire des transitions (Dico de Dico de Set)
         self.complet = False
         self.standard = False
         self.deterministe = False
@@ -137,7 +137,7 @@ class Automate:
         self.afficher_tableau()
         return automate_minimal_final
 
-    # Méthode permettant de definir le langage que l'on utilisera dans l'autmate
+    # Méthode permettant de definir le langage que l'on utilisera dans l'automate
     def definir_langage(self, alphabet):
         """Définit l'alphabet du langage"""
         self.langage = set(alphabet)
@@ -210,7 +210,7 @@ class Automate:
             for etat in self.transition:
                 for symbole in self.transition[etat]:
                     setdEtat = self.transition[etat][symbole]
-                    if (self.entree == setdEtat):
+                    if (i in setdEtat for i in self.entree):
                         self.standard = False
                         return False
             self.standard = True
@@ -394,7 +394,7 @@ class Automate:
                 for e in etat_transition_epsilon[etat]:
                     if e in self.transition and symbole in self.transition[e]:
                         for destination in self.transition[e][symbole]:
-                            nouveaux_etats.update(etat_transition_epsilon[destination])
+                            nouveaux_etats.update(destination)
                 if nouveaux_etats:
                     for i in nouveaux_etats:
                         automate_synchrone.ajouter_transition(etat, symbole, i)
