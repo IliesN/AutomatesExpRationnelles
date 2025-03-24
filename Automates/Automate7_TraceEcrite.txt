@@ -1,6 +1,3 @@
-/opt/homebrew/bin/python3 /Users/enzojuzyna/projetfinal/main.py
-➜  projetfinal /opt/homebrew/bin/python3 /Users/
-enzojuzyna/projetfinal/main.py
 ╭─ Menu Principal ─╮
 │ Automates Finis  │
 ╰──────────────────╯
@@ -34,53 +31,18 @@ Tableau de transitions:
 │ S    │ 0    │      │
 │ E    │ 1    │ 0, 1 │
 └──────┴──────┴──────┘
-     Propriétés de l'automate      
-┏━━━━━━━━━━━━━━━━━━━━━━━━┳━━━━━━━━┓
-┃ Propriété              ┃ Valeur ┃
-┡━━━━━━━━━━━━━━━━━━━━━━━━╇━━━━━━━━┩
-│ Déterministe           │ Non    │
-│ Complet                │ Non    │
-│ Standard               │ Oui    │
-│ Déterministe & Complet │ Non    │
-│ Minimal                │ Non    │
-└────────────────────────┴────────┘
-
-Entrez votre choix (0-14): 2
-États : 0, 1
-Alphabet : a
-États d'entrée : 1
-États de sortie : 0
-Tableau de transitions:
-   Transitions par    
-       symbole        
-┏━━━━━━┳━━━━━━┳━━━━━━┓
-┃ Type ┃ Etat ┃ a    ┃
-┡━━━━━━╇━━━━━━╇━━━━━━┩
-│ S    │ 0    │      │
-│ E    │ 1    │ 0, 1 │
-└──────┴──────┴──────┘
-     Propriétés de l'automate      
-┏━━━━━━━━━━━━━━━━━━━━━━━━┳━━━━━━━━┓
-┃ Propriété              ┃ Valeur ┃
-┡━━━━━━━━━━━━━━━━━━━━━━━━╇━━━━━━━━┩
-│ Déterministe           │ Non    │
-│ Complet                │ Non    │
-│ Standard               │ Oui    │
-│ Déterministe & Complet │ Non    │
-│ Minimal                │ Non    │
-└────────────────────────┴────────┘
 
 Entrez votre choix (0-14): 3
-L'automate est standard.
+L'automate est non standard.
 
 Entrez votre choix (0-14): 4
 Standardisation de l'automate...
-L'automate est déjà standard.
+L'automate a été standardisé avec succès.
 
 Entrez votre choix (0-14): 2
-États : 0, 1
+États : 0, 1, i
 Alphabet : a
-États d'entrée : 1
+États d'entrée : i
 États de sortie : 0
 Tableau de transitions:
    Transitions par    
@@ -89,18 +51,9 @@ Tableau de transitions:
 ┃ Type ┃ Etat ┃ a    ┃
 ┡━━━━━━╇━━━━━━╇━━━━━━┩
 │ S    │ 0    │      │
-│ E    │ 1    │ 0, 1 │
+│      │ 1    │ 0, 1 │
+│ E    │ i    │ 0, 1 │
 └──────┴──────┴──────┘
-     Propriétés de l'automate      
-┏━━━━━━━━━━━━━━━━━━━━━━━━┳━━━━━━━━┓
-┃ Propriété              ┃ Valeur ┃
-┡━━━━━━━━━━━━━━━━━━━━━━━━╇━━━━━━━━┩
-│ Déterministe           │ Non    │
-│ Complet                │ Non    │
-│ Standard               │ Oui    │
-│ Déterministe & Complet │ Non    │
-│ Minimal                │ Non    │
-└────────────────────────┴────────┘
 
 Entrez votre choix (0-14): 5
 L'automate est non complet.
@@ -124,17 +77,6 @@ Tableau de transitions:
 │ E    │ 1    │ 0, 1 │
 │      │ P    │ P    │
 └──────┴──────┴──────┘
-     Propriétés de l'automate      
-┏━━━━━━━━━━━━━━━━━━━━━━━━┳━━━━━━━━┓
-┃ Propriété              ┃ Valeur ┃
-┡━━━━━━━━━━━━━━━━━━━━━━━━╇━━━━━━━━┩
-│ Déterministe           │ Non    │
-│ Complet                │ Oui    │
-│ Standard               │ Oui    │
-│ Déterministe & Complet │ Non    │
-│ Minimal                │ Non    │
-└────────────────────────┴────────┘
-
 
 Entrez votre choix (0-14): 9
 Déterminisation de l'automate...
@@ -163,16 +105,6 @@ Tableau de transitions:
 │ S    │ 0-1  │ 0-1 │
 │ E    │ 1    │ 0-1 │
 └──────┴──────┴─────┘
-     Propriétés de l'automate      
-┏━━━━━━━━━━━━━━━━━━━━━━━━┳━━━━━━━━┓
-┃ Propriété              ┃ Valeur ┃
-┡━━━━━━━━━━━━━━━━━━━━━━━━╇━━━━━━━━┩
-│ Déterministe           │ Oui    │
-│ Complet                │ Oui    │
-│ Standard               │ Oui    │
-│ Déterministe & Complet │ Oui    │
-│ Minimal                │ Non    │
-└────────────────────────┴────────┘
 
 Entrez votre choix (0-14): 11
 Début de la minimisation de l'automate...
@@ -219,13 +151,4 @@ Tableau de transitions:
 │      │ 0-1  │ 0-1 │
 │ E/S  │ 1    │ 0-1 │
 └──────┴──────┴─────┘
-     Propriétés de l'automate      
-┏━━━━━━━━━━━━━━━━━━━━━━━━┳━━━━━━━━┓
-┃ Propriété              ┃ Valeur ┃
-┡━━━━━━━━━━━━━━━━━━━━━━━━╇━━━━━━━━┩
-│ Déterministe           │ Oui    │
-│ Complet                │ Oui    │
-│ Standard               │ Oui    │
-│ Déterministe & Complet │ Oui    │
-│ Minimal                │ Non    │
-└────────────────────────┴────────┘
+

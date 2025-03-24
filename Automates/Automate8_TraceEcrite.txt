@@ -32,41 +32,6 @@ Tableau de transitions:
 │ S    │ 0    │ 0 │
 │ E    │ 1    │ 0 │
 └──────┴──────┴───┘
-     Propriétés de l'automate      
-┏━━━━━━━━━━━━━━━━━━━━━━━━┳━━━━━━━━┓
-┃ Propriété              ┃ Valeur ┃
-┡━━━━━━━━━━━━━━━━━━━━━━━━╇━━━━━━━━┩
-│ Déterministe           │ Oui    │
-│ Complet                │ Oui    │
-│ Standard               │ Oui    │
-│ Déterministe & Complet │ Oui    │
-│ Minimal                │ Non    │
-└────────────────────────┴────────┘
-
-Entrez votre choix (0-14): 2
-États : 0, 1
-Alphabet : a
-États d'entrée : 1
-États de sortie : 0
-Tableau de transitions:
-  Transitions par  
-      symbole      
-┏━━━━━━┳━━━━━━┳━━━┓
-┃ Type ┃ Etat ┃ a ┃
-┡━━━━━━╇━━━━━━╇━━━┩
-│ S    │ 0    │ 0 │
-│ E    │ 1    │ 0 │
-└──────┴──────┴───┘
-     Propriétés de l'automate      
-┏━━━━━━━━━━━━━━━━━━━━━━━━┳━━━━━━━━┓
-┃ Propriété              ┃ Valeur ┃
-┡━━━━━━━━━━━━━━━━━━━━━━━━╇━━━━━━━━┩
-│ Déterministe           │ Oui    │
-│ Complet                │ Oui    │
-│ Standard               │ Oui    │
-│ Déterministe & Complet │ Oui    │
-│ Minimal                │ Non    │
-└────────────────────────┴────────┘
 
 Entrez votre choix (0-14): 3
 L'automate est standard.
@@ -89,16 +54,6 @@ Tableau de transitions:
 │ S    │ 0    │ 0 │
 │ E    │ 1    │ 0 │
 └──────┴──────┴───┘
-     Propriétés de l'automate      
-┏━━━━━━━━━━━━━━━━━━━━━━━━┳━━━━━━━━┓
-┃ Propriété              ┃ Valeur ┃
-┡━━━━━━━━━━━━━━━━━━━━━━━━╇━━━━━━━━┩
-│ Déterministe           │ Oui    │
-│ Complet                │ Oui    │
-│ Standard               │ Oui    │
-│ Déterministe & Complet │ Oui    │
-│ Minimal                │ Non    │
-└────────────────────────┴────────┘
 
 Entrez votre choix (0-14): 5
 L'automate est complet.
@@ -156,13 +111,4 @@ Tableau de transitions:
 │      │ 0    │ 0 │
 │ E/S  │ 1    │ 0 │
 └──────┴──────┴───┘
-     Propriétés de l'automate      
-┏━━━━━━━━━━━━━━━━━━━━━━━━┳━━━━━━━━┓
-┃ Propriété              ┃ Valeur ┃
-┡━━━━━━━━━━━━━━━━━━━━━━━━╇━━━━━━━━┩
-│ Déterministe           │ Oui    │
-│ Complet                │ Oui    │
-│ Standard               │ Oui    │
-│ Déterministe & Complet │ Oui    │
-│ Minimal                │ Non    │
-└────────────────────────┴────────┘
+

@@ -32,51 +32,13 @@ Transitions par
 ┡━━━━━━╇━━━━━━┩
 │ E/S  │ 0    │
 └──────┴──────┘
-     Propriétés de l'automate      
-┏━━━━━━━━━━━━━━━━━━━━━━━━┳━━━━━━━━┓
-┃ Propriété              ┃ Valeur ┃
-┡━━━━━━━━━━━━━━━━━━━━━━━━╇━━━━━━━━┩
-│ Déterministe           │ Oui    │
-│ Complet                │ Oui    │
-│ Standard               │ Oui    │
-│ Déterministe & Complet │ Oui    │
-│ Minimal                │ Non    │
-└────────────────────────┴────────┘
-
-
-Entrez votre choix (0-14): 2
-États : 0
-Alphabet : 
-États d'entrée : 0
-États de sortie : 0
-Tableau de transitions:
-Transitions par
-    symbole    
-┏━━━━━━┳━━━━━━┓
-┃ Type ┃ Etat ┃
-┡━━━━━━╇━━━━━━┩
-│ E/S  │ 0    │
-└──────┴──────┘
-     Propriétés de l'automate      
-┏━━━━━━━━━━━━━━━━━━━━━━━━┳━━━━━━━━┓
-┃ Propriété              ┃ Valeur ┃
-┡━━━━━━━━━━━━━━━━━━━━━━━━╇━━━━━━━━┩
-│ Déterministe           │ Oui    │
-│ Complet                │ Oui    │
-│ Standard               │ Oui    │
-│ Déterministe & Complet │ Oui    │
-│ Minimal                │ Non    │
-└────────────────────────┴────────┘
-
 
 Entrez votre choix (0-14): 3
 L'automate est standard.
 
-
 Entrez votre choix (0-14): 4
 Standardisation de l'automate...
 L'automate est déjà standard.
-
 
 Entrez votre choix (0-14): 6
 Complétion de l'automate...
@@ -118,3 +80,17 @@ Entrez votre choix (0-14): 8
 Calcul du complémentaire de l'automate...
 Le complémentaire de l'automate a été calculé 
 avec succès.
+
+Entrez votre choix (0-14): 2
+États : 0
+Alphabet : 
+États d'entrée : 0
+États de sortie : 
+Tableau de transitions:
+Transitions par
+    symbole    
+┏━━━━━━┳━━━━━━┓
+┃ Type ┃ Etat ┃
+┡━━━━━━╇━━━━━━┩
+│ E    │ 0    │
+└──────┴──────┘

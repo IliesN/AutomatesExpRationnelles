@@ -33,42 +33,6 @@ Transitions par symbole
 │ S    │ 2    │   │   │
 │ E    │ 3    │   │ 0 │
 └──────┴──────┴───┴───┘
-     Propriétés de l'automate      
-┏━━━━━━━━━━━━━━━━━━━━━━━━┳━━━━━━━━┓
-┃ Propriété              ┃ Valeur ┃
-┡━━━━━━━━━━━━━━━━━━━━━━━━╇━━━━━━━━┩
-│ Déterministe           │ Non    │
-│ Complet                │ Non    │
-│ Standard               │ Non    │
-│ Déterministe & Complet │ Non    │
-│ Minimal                │ Non    │
-└────────────────────────┴────────┘
-
-Entrez votre choix (0-14): 2
-États : 0, 1, 2, 3
-Alphabet : a, b
-États d'entrée : 1, 3
-États de sortie : 0, 2
-Tableau de transitions:
-Transitions par symbole
-┏━━━━━━┳━━━━━━┳━━━┳━━━┓
-┃ Type ┃ Etat ┃ a ┃ b ┃
-┡━━━━━━╇━━━━━━╇━━━╇━━━┩
-│ S    │ 0    │   │   │
-│ E    │ 1    │ 2 │   │
-│ S    │ 2    │   │   │
-│ E    │ 3    │   │ 0 │
-└──────┴──────┴───┴───┘
-     Propriétés de l'automate      
-┏━━━━━━━━━━━━━━━━━━━━━━━━┳━━━━━━━━┓
-┃ Propriété              ┃ Valeur ┃
-┡━━━━━━━━━━━━━━━━━━━━━━━━╇━━━━━━━━┩
-│ Déterministe           │ Non    │
-│ Complet                │ Non    │
-│ Standard               │ Non    │
-│ Déterministe & Complet │ Non    │
-│ Minimal                │ Non    │
-└────────────────────────┴────────┘
 
 Entrez votre choix (0-14): 3
 L'automate est non standard.
@@ -93,16 +57,6 @@ Transitions par symbole
 │      │ 3    │   │ 0 │
 │ E    │ i    │ 2 │ 0 │
 └──────┴──────┴───┴───┘
-     Propriétés de l'automate      
-┏━━━━━━━━━━━━━━━━━━━━━━━━┳━━━━━━━━┓
-┃ Propriété              ┃ Valeur ┃
-┡━━━━━━━━━━━━━━━━━━━━━━━━╇━━━━━━━━┩
-│ Déterministe           │ Oui    │
-│ Complet                │ Non    │
-│ Standard               │ Oui    │
-│ Déterministe & Complet │ Non    │
-│ Minimal                │ Non    │
-└────────────────────────┴────────┘
 
 Entrez votre choix (0-14): 5
 L'automate est non complet.
@@ -126,16 +80,6 @@ Transitions par symbole
 │ E    │ 3    │ P │ 0 │
 │      │ P    │ P │ P │
 └──────┴──────┴───┴───┘
-     Propriétés de l'automate      
-┏━━━━━━━━━━━━━━━━━━━━━━━━┳━━━━━━━━┓
-┃ Propriété              ┃ Valeur ┃
-┡━━━━━━━━━━━━━━━━━━━━━━━━╇━━━━━━━━┩
-│ Déterministe           │ Non    │
-│ Complet                │ Oui    │
-│ Standard               │ Non    │
-│ Déterministe & Complet │ Non    │
-│ Minimal                │ Non    │
-└────────────────────────┴────────┘
 
 Entrez votre choix (0-14): 7
 L'automate est non déterministe.
@@ -219,13 +163,3 @@ Transitions par symbole
 │      │ 2    │ P │ P │
 │ S    │ P    │ P │ P │
 └──────┴──────┴───┴───┘
-     Propriétés de l'automate      
-┏━━━━━━━━━━━━━━━━━━━━━━━━┳━━━━━━━━┓
-┃ Propriété              ┃ Valeur ┃
-┡━━━━━━━━━━━━━━━━━━━━━━━━╇━━━━━━━━┩
-│ Déterministe           │ Oui    │
-│ Complet                │ Oui    │
-│ Standard               │ Oui    │
-│ Déterministe & Complet │ Oui    │
-│ Minimal                │ Non    │
-└────────────────────────┴────────┘
