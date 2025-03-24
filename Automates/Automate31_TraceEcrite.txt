@@ -15,27 +15,17 @@ Affichage :
 
 Déterminisation & Compléltion : 
 
-┏━━━━━━┳━━━━━━━━━┳━━━━━━━━━┳━━━━━━━━━┓
-┃ Type ┃ Etat    ┃ a       ┃ b       ┃
-┡━━━━━━╇━━━━━━━━━╇━━━━━━━━━╇━━━━━━━━━┩
-│ E    │ 0       │ 2-3-7-P │ 5-P     │
-│ S    │ 1-3-7-P │ 2-3-7-P │ P       │
-│ S    │ 2-3-7-P │ 3-7-P   │ 1-3-7-P │
-│ S    │ 3-7-P   │ 3-7-P   │ P       │
-│ S    │ 4-6-7-P │ P       │ 5-P     │
-│      │ 5-P     │ P       │ 4-6-7-P │
-│      │ P       │ P       │ P       │
-└──────┴─────────┴─────────┴─────────┘
-     Propriétés de l'automate      
-┏━━━━━━━━━━━━━━━━━━━━━━━━┳━━━━━━━━┓
-┃ Propriété              ┃ Valeur ┃
-┡━━━━━━━━━━━━━━━━━━━━━━━━╇━━━━━━━━┩
-│ Déterministe           │ Oui    │
-│ Complet                │ Oui    │
-│ Standard               │ Oui    │
-│ Déterministe & Complet │ Oui    │
-│ Minimal                │ Non    │
-└────────────────────────┴────────┘
+┏━━━━━━┳━━━━━━┳━━━┳━━━━━┓
+┃ Type ┃ Etat ┃ a ┃ b   ┃
+┡━━━━━━╇━━━━━━╇━━━╇━━━━━┩
+│ E    │ 0    │ 2 │ 3-5 │
+│ S    │ 1    │ 2 │ 3   │
+│      │ 2    │ 3 │ 1   │
+│ S    │ 3    │ P │ 3   │
+│ S    │ 3-5  │ P │ 3-6 │
+│ S    │ 3-6  │ P │ 3-5 │
+│      │ P    │ P │ P   │
+└──────┴──────┴───┴─────┘
 
 Complémentaire :
 
@@ -50,16 +40,6 @@ Complémentaire :
 │      │ 3-6  │ P │ 3-5 │
 │ S    │ P    │ P │ P   │
 └──────┴──────┴───┴─────┘
-     Propriétés de l'automate      
-┏━━━━━━━━━━━━━━━━━━━━━━━━┳━━━━━━━━┓
-┃ Propriété              ┃ Valeur ┃
-┡━━━━━━━━━━━━━━━━━━━━━━━━╇━━━━━━━━┩
-│ Déterministe           │ Oui    │
-│ Complet                │ Oui    │
-│ Standard               │ Non    │
-│ Déterministe & Complet │ Oui    │
-│ Minimal                │ Non    │
-└────────────────────────┴────────┘
 
 
 Minimisation :
